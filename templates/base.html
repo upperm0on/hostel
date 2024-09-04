@@ -1,0 +1,66 @@
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hostel Nation</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <img src="#" alt="Logo Here">
+        </div>
+        <ul class="list-inline">
+            <li class="list-inline-item"><a href="{% url 'landing_page' %}" class="nav-link">Home</a></li>
+            <li class="list-inline-item"><a href="#" class="nav-link">Hostels</a></li>
+            <li class="list-inline-item"><a href="#" class="nav-link">Services</a></li>
+            <li class="list-inline-item"><a href="#" class="nav-link">About</a></li>
+            <li class="list-inline-item"><a href="#" class="nav-link">Contact Us</a></li>
+        </ul>
+        <div class="authentication">
+            <button type="button" class="btn1"><a href="{% url 'user_signup' %}" class="nav-link">Sign Up</a></button>
+            <button type="button" class="btn2"><a href="{% url 'user_login' %}" class="nav-link">Log In</a></button>
+        </div>
+    </nav>
+    <main>
+        {% block content %} {% endblock content %}
+    </main>
+    <footer>
+        <div class="logo">
+            <img src="#" alt="logo here">
+            <span class="logo-text">The nation with the best hotels for Students</span>
+        </div>
+        <div class="middle-side">
+            <div class="first-side">
+                <span class="small-heading">For more information contact us with the information below </span>
+                <ul class="list-inline">
+                    <li class="list-inline-item">Address</li>
+                    <li class="list-inline-item">Contact</li>
+                    <li class="list-inline-item">Email</li>
+                </ul>
+                <ul class="list-inline">
+                    <li class="list-inline-item">instagram</li>
+                    <li class="list-inline-item">twitter</li>
+                    <li class="list-inline-item">facebook</li>
+                    <li class="list-inline-item">linkedin</li>
+                </ul>
+            </div>
+            <div class="second-side">
+                <ul class="list-inline">
+                    <li class="list-inline-item">Join Us and Grow</li>
+                    <li class="list-inline-item">Join Our Team</li>
+                    <li class="list-inline-item">Guest Privacy</li>
+                    <li class="list-inline-item">Terms and Conditions</li>
+                    <li class="list-inline-item">Privacy Policy</li>
+                    <li class="list-inline-item">Advertise Here</li>
+                </ul>
+            </div>
+        </div>
+        <div class="small-quote">
+            "Mi Casa es tu Casa".
+        </div>
+    </footer>
+</body>
+</html>

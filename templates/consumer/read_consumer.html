@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <ul>
+    {% for object in obj %}
+        <li> {{ object.name }}</li>
+    {% endfor %}
+
+    <b>{{ request.user.username }}</b>
+    </ul>
+{% endblock content %}

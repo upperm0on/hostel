@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <ul>
+        {% for objects in obj %}
+            <li>
+                <a href="{% url 'update_manager' objects.id %}">{{ objects.name }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+{% endblock content %}

@@ -1,0 +1,83 @@
+@import "./config.css";
+
+body {
+    background: var(--white);
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+nav {
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px;
+    box-shadow: 0px 0px 20px -10px var(--blue);
+    align-items: center;
+}
+
+nav .list-inline .list-inline-item a {
+    font-weight: 500;
+}
+
+nav .authentication .btn1 {
+    background: transparent;
+    border: 1px solid var(--blue);
+    color: var(--blue);
+    padding: 5px 15px;
+    border-radius: 15px;
+    font-weight: 500;
+    font-size: .85rem;
+}
+
+nav .authentication .btn2 {
+    background: var(--blue);
+    border: 1px solid var(--blue);
+    color: var(--white);
+    padding: 5px 15px;
+    border-radius: 15px;
+    font-weight: 500;
+    font-size: .85rem;
+}
+
+main {
+    margin: 50px;
+}
+
+footer {
+    background: var(--blue);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+footer .logo {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    align-items: center;
+}
+
+footer .middle-side {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+footer .middle-side .first-side .list-inline:nth-child(2) {
+    display: flex;
+    flex-direction: column;
+}
+
+footer .middle-side .second-side .list-inline {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+footer .small-quote {
+    align-self: center;
+}

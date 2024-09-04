@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <ul>
+        {% for hostel in hostels %}
+            <li><a href="{% url "update_hostel" hostel.id %}">{{ hostel.name }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock content %}
