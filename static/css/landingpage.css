@@ -1,0 +1,226 @@
+@import './config.css';
+
+#section1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+}
+
+#section1 .section-title {
+    font-size: 2rem;
+    font-family: var(--font);
+    text-transform: capitalize;
+    margin-bottom: 50px;
+    position: relative;
+}
+
+#section1 .section-title::before {
+    content: '';
+    position: absolute;
+    top: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 2px;
+    width: 30%;
+    background: var(--blue);
+    margin-bottom: 20px;
+}
+
+#section1 .list-inline {
+    list-style: none;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 85%;
+}
+
+#section1 .list-inline .list-inline-item {
+    height: 325px;
+    max-height: 325px;
+    width: 20%;
+    position: relative;
+    transition:background 300ms ease;
+    border-radius: 15px;
+}
+
+#section1 .list-inline .list-inline-item:hover::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(0deg, var(--blue), transparent, transparent);
+    transition: 300ms ease;
+}
+
+#section1 .list-inline .list-inline-item img{
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+#section1 .list-inline .list-inline-item .room-info {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#section1 .list-inline .list-inline-item .room-info span {
+    color: var(--white);
+}
+
+#section1 .list-inline .list-inline-item .room-info button {
+    padding: 5px 15px;
+    background: transparent;
+    border: 2px solid var(--white);
+    color: var(--white);
+    border-radius: 15px;
+    margin-top: 30px;
+    text-transform: capitalize;
+    font-size: 1rem;
+    font-weight: 450;
+    transition: background 300ms ease;
+}
+
+#section1 .list-inline .list-inline-item .room-info button:hover{
+    background: var(--white);
+    color: var(--black);
+}
+
+#section2 {
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    width: 80%;
+    margin: 70px auto;
+}
+
+#section2 .list-inline {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    position: relative;
+    height: 300px;
+}
+
+#section2 .list-inline .list-inline-item {
+    height: 300px;
+    width: 450px;
+    border-radius: 15px;
+    overflow: hidden;
+    object-fit: contain;
+    position: absolute;
+}
+
+#section2 .list-inline .list-inline-item .image {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    position: relative;
+}
+
+#section2 .list-inline .list-inline-item .image::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(0deg, var(--blue), transparent);
+    z-index: 1;
+}
+
+#section2 .list-inline .list-inline-item .image img {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%)
+}
+
+#section2 .list-inline .list-inline-item .display-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--white2);
+    z-index: 2;
+    padding: 5px;
+    width: 80%;
+}
+
+#section2 .list-inline .list-inline-item .display-info .details-item {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+#section2 .list-inline .list-inline-item .display-info .details-item span {
+    color: var(--white);
+}
+
+#section2 .list-inline .list-inline-item .display-info .room-info2 span {
+    color: var(--white);
+}
+
+#section2 .list-inline .list-inline-item .display-info .room-info2 {
+    list-style: none;
+    font-size: .85rem;
+    float: right;
+}
+
+#section2 .list-inline .list-inline-item .info1 {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background: var(--black2);
+    z-index: 3;
+    align-items: center;
+    padding-top: 30px;
+    list-style: none;
+    color: var(--white2);
+    transition: left 300ms ease;
+}
+
+#section2 .list-inline .list-inline-item .info1 .title {
+    font-family: var(--font2);
+    font-size: 1.5rem;
+    color: white;
+    position: relative;
+    margin-bottom: 30px;
+}
+
+#section2 .list-inline .list-inline-item .info1 .title::before{
+    content: '';
+    height: 2px;
+    width: 30%;
+    background: var(--white);
+    position: absolute;
+    top: 125%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#section2 .list-inline .list-inline-item .three-dots {
+    position: absolute;
+    top: 10%;
+    left: 95%;
+    color: var(--white);
+    z-index: 4;
+    padding: 5px;
+    cursor: pointer;
+}
