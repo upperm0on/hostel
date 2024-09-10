@@ -76,6 +76,7 @@
 
 #section1 .list-inline .list-inline-item .room-info span {
     color: var(--white);
+    text-align: center;
 }
 
 #section1 .list-inline .list-inline-item .room-info button {
@@ -106,7 +107,7 @@
 #section2 .list-inline {
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: space-between;
     position: relative;
     height: 300px;
 }
@@ -116,8 +117,35 @@
     width: 450px;
     border-radius: 15px;
     overflow: hidden;
-    object-fit: contain;
     position: absolute;
+    margin-left: 80px;
+}
+
+#section2 .list-inline .left-arrow {
+    position: relative;
+    margin: auto 0;
+    transform: translateY(-50%);
+}
+
+#section2 .list-inline .left-arrow * {
+    font-size: 2rem;
+    color: var(--black2);
+    transition: 300ms ease;
+    cursor: pointer;
+}
+
+#section2 .list-inline .right-arrow {
+    position: relative;
+    margin: auto 0;
+    padding: 5px;
+}
+
+#section2 .list-inline .right-arrow button {
+    background: transparent;
+    border-radius: 15px;
+    border: 2px solid var(--black);
+    padding: 5px 15px;
+    font-weight: 500;
 }
 
 #section2 .list-inline .list-inline-item .image {
@@ -220,7 +248,27 @@
     top: 10%;
     left: 95%;
     color: var(--white);
-    z-index: 4;
     padding: 5px;
     cursor: pointer;
+    z-index: 4;
+    transform-origin: left;
+}
+
+#section2 .section-title {
+    font-size: 1.75rem;
+    font-family: var(--font);
+    text-transform: capitalize;
+    position: relative;
+    margin: auto 0;
+}
+
+#section2 .section-title::before {
+    content: '';
+    position: absolute;
+    top: 125%;
+    left: 25%;
+    margin: 0 auto;
+    height: 2px;
+    width: 30%;
+    background: var(--blue);
 }

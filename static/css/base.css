@@ -8,6 +8,7 @@ body {
     top: 0;
     left: 0;
     font-family: var(--font1);
+    overflow-x: hidden;
 }
 
 nav {
@@ -15,7 +16,7 @@ nav {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding: 10px;
+    padding: 10px 20px;
     box-shadow: 0px 0px 20px -10px var(--blue);
     align-items: center;
 }
@@ -67,6 +68,15 @@ footer .middle-side {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+}
+
+footer .middle-side .first-side .list-inline .list-inline-item {
+    margin: 5px;
+}
+
+footer .middle-side .first-side .list-inline .list-inline-item i {
+    font-size: 1.5rem;
+    cursor: pointer;
 }
 
 footer .middle-side .first-side .list-inline:nth-child(2) {
