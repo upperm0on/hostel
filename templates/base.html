@@ -15,12 +15,13 @@
         </div>
         <ul class="list-inline">
             <li class="list-inline-item"><a href="{% url 'landing_page' %}" class="nav-link">Home</a></li>
-            <li class="list-inline-item"><a href="#" class="nav-link">Hostels</a></li>
+            <li class="list-inline-item"><a href="{% url 'read_hostels' %}" class="nav-link">Hostels</a></li>
             <li class="list-inline-item"><a href="#" class="nav-link">Services</a></li>
             <li class="list-inline-item"><a href="#" class="nav-link">About</a></li>
             <li class="list-inline-item"><a href="#" class="nav-link">Contact Us</a></li>
         </ul>
         <div class="authentication">
+            {% block nav_btn_addition %} {% endblock nav_btn_addition %}
             <button type="button" class="btn1"><a href="{% url 'user_signup' %}" class="nav-link">Sign Up</a></button>
             <button type="button" class="btn2"><a href="{% url 'user_login' %}" class="nav-link">Log In</a></button>
         </div>

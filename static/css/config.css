@@ -1,5 +1,33 @@
 @import url('https://fonts.googleapis.com/css2?family=Lobster+Two:ital,wght@0,400;0,700;1,400;1,700&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 
+
+/* Scrollbar styles for WebKit-based browsers (Chrome, Safari) */
+::-webkit-scrollbar {
+  width: 12px; /* Width of the scrollbar */
+  height: 12px; /* Height of the scrollbar for horizontal scrolling */
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Track color (background of the scrollbar) */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #c1c1c1; /* Thumb color (scrolling handle) */
+  border-radius: 6px; /* Rounded corners for the thumb */
+  border: 3px solid #f1f1f1; /* Adds padding between the thumb and the track */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #a0a0a0; /* Thumb color on hover */
+}
+
+/* Scrollbar styles for Firefox */
+body {
+  scrollbar-width: thin; /* Sets a thin scrollbar width */
+  scrollbar-color: #c1c1c1 #f1f1f1; /* thumb color and track color */
+}
+
+
 .open-sans {
     font-family: "Open Sans", sans-serif;
     font-optical-sizing: auto;

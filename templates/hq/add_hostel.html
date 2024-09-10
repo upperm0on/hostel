@@ -1,8 +1,16 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
-    <form action="." method="POST">
+    <form action="." method="POST" id="form" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Submit</button>
+        <div class="add_info_center"></div>
+        <div class="add_room_details_center"></div>
+        <input type="hidden" name="hidden_data" class="hidden_data" value="0">
+        <button type="submit" class="submit">Submit</button>
     </form>
+    <button type="button" class="add_info">Additional Info </button>
+    <button type="button" class="add_room_detail">Rooms Information</button>
+
+    <script src="{% static 'js/hq/add_hostel.js' %}"></script>
 {% endblock content %}
