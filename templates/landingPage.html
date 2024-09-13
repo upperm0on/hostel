@@ -7,28 +7,28 @@
       <img src="{% static 'images/room1.png' %}" alt="" />
       <div class="room-info">
         <span>1 in a room</span>
-        <button type="button">See more</button>
+        <button type="button"><a href="{% url 'search_hostel' 1 %}" class="nav-link">See more</a></button>
       </div>
     </li>
     <li class="list-inline-item">
       <img src="{% static 'images/room2.png' %}" alt="" />
       <div class="room-info">
         <span>2 in a room</span>
-        <button type="button">See more</button>
+        <button type="button"><a href="{% url 'search_hostel' 2 %}" class="nav-link">See more</a></button>
       </div>
     </li>
     <li class="list-inline-item">
       <img src="{% static 'images/room3.png' %}" alt="" />
       <div class="room-info">
         <span>3 in a room</span>
-        <button type="button">See more</button>
+        <button type="button"><a href="{% url 'search_hostel' 3 %}" class="nav-link">See more</a></button>
       </div>
     </li>
     <li class="list-inline-item">
       <img src="{% static 'images/room4.png' %}" alt="" />
       <div class="room-info">
         <span>4 in a room</span>
-        <button type="button">See more</button>
+        <button type="button"><a href="{% url 'search_hostel' 4 %}" class="nav-link">See more</a></button>
       </div>
     </li>
   </ul>

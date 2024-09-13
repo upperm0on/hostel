@@ -13,7 +13,7 @@ add_btn.addEventListener("click", () => {
   element = document.createElement("div");
   element.classList.add("add_info_item");
   element.innerHTML =
-    '<input type="text" class="add_info_item" placeholder="Additional Information Here"/>';
+    '<input type="text" class="add_info_item_here" placeholder="Additional Information Here" name="add_info" />';
   add_info.appendChild(element);
 });
 
@@ -38,8 +38,17 @@ submit_btn.addEventListener("click", (e) => {
   var price = document.querySelectorAll(".price");
   var number_of_rooms = document.querySelectorAll(".quantity");
 
+  var infos = document.querySelectorAll('.add_info_item_here');
+  var hidden_infos_input = document.querySelector('.hidden_info_data');
+
   // Clear the previous details to avoid duplication
   rooms_details = [];
+  info_details = [];
+
+  infos.forEach(info => {
+    let information = info?.value
+    info_details.push(information)
+  })
 
   // Iterate through each set of room details and store them in an array of objects
   room_type.forEach((_, index) => {
@@ -55,6 +64,9 @@ submit_btn.addEventListener("click", (e) => {
 
   // Convert the array to a JSON string to send via a hidden input
   let roomsDetailsJSON = JSON.stringify(rooms_details);
+  let additional_info_JSON = JSON.stringify(info_details);
+
+  hidden_infos_input.value = additional_info_JSON
 
   // Append the hidden input element to the form
   hidden_data.value = roomsDetailsJSON

@@ -7,4 +7,3 @@ class Views_addHostel(forms.ModelForm):
         model = Hostel 
         fields = ["name", "location", "category", "image"]
 
-

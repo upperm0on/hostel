@@ -14,3 +14,6 @@ class Hostel(models.Model):
     image = models.ImageField(upload_to='media/', blank=True, null=True)
     manager = models.ForeignKey(Manager, on_delete=models.CASCADE, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
