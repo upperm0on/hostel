@@ -2,7 +2,13 @@ from django.shortcuts import render, redirect
 
 from .models import Hostel
 from .add_hostel_forms import Views_addHostel
-
+from ratings.models import (
+    five_star,
+    four_star,
+    three_star,
+    two_star,
+    one_star
+)
 
 import json
 # Create your views here.
@@ -28,7 +34,33 @@ def add_hostel(request):
 
 
 def read_hostel(request): 
-    hostels = Hostel.objects.all()
+    hostels = Hostel.objects.all().order_by("-ratings")
+    
+    stars_list = [one_star, two_star, three_star, four_star, five_star]  # List of star rating models
+
+    for obj in hostels: 
+        total_star = 0 
+        count2 = 0
+    # Calculate the total star rating and count
+        for i in range(len(stars_list)):
+            count = stars_list[i].objects.filter(product=obj).count()
+            counted_rate = stars_list[i].objects.filter(product=obj).count()
+            count2 += counted_rate
+
+            count = count * (i + 1) 
+            total_star += count
+
+        # Calculate the average rating
+        try: 
+            total_rate = (total_star/count2) 
+        except: 
+            total_rate = 0
+
+        obj.ratings = round(total_rate, 1)
+        obj.save()
+    
+        print(obj, obj.ratings) 
+
     context = {
         'hostels': hostels,
     }
@@ -48,7 +80,7 @@ def update_hostel(request, id):
 
 def search_hostel(request, rooms): 
     template_name = "hq/search_hostels.html"
-    objects = Hostel.objects.all()
+    objects = Hostel.objects.all().order_by("-ratings")
     queryset = list()
     for obj in objects:
         if obj.room_details: 
@@ -65,5 +97,8 @@ def search_hostel(request, rooms):
 
 def detail_hostel(request, id): 
     template_name = 'hq/detail_hostel.html'
-    context = {}
+    hostel = Hostel.objects.get(id=id) 
+    context = {
+        'hostel': hostel,
+    }
     return render(request, template_name, context)

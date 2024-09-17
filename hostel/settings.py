@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'consumers',
     'user_auth',
     'category',
+    'ratings',
 ]
 
 MIDDLEWARE = [
