@@ -29,7 +29,7 @@
                             json_data.forEach(data => {
                                 element = document.createElement('li')
                                 element.classList.add("list-inline-item")
-                                element.innerHTML = `${data['number_in_room']} in a Room at <strong>${data['price']}</strong> GHC `
+                                element.innerHTML = `<a href='{% url "room_detail" hostel.name %}'>${data['number_in_room']} in a Room </a> at <strong>${data['price']}</strong> GHC `
                                 append_here.appendChild(element)
                             })
                     </script>

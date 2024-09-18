@@ -5,7 +5,7 @@
     <form action="." method="POST" id="form" enctype="multipart/form-data">
         {% csrf_token %}
         <ul class="list-inline">
-            <li>
+            <li class="list-inline-item">
                 {{ form.as_p }}
             </li>
             <li class="list-inline-item">
