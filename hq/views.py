@@ -26,7 +26,7 @@ def add_hostel(request):
             
             # Get the list of room images
             room_images = request.FILES.getlist('room_image')
-            print(room_images)
+            print(room_images) 
             
             # Parse hidden data if necessary
             room_details = json.loads(hidden_data)
@@ -120,8 +120,23 @@ def search_hostel(request, rooms):
 def detail_hostel(request, id): 
     template_name = 'hq/detail_hostel.html'
     hostel = Hostel.objects.get(id=id)
+        # Retrieve the images for display (this is just an example)
+    hostel_name = hostel.name  # Replace with your logic to get the hostel name
+
+    room_image_urls = []
+    for room in json.loads(hostel.room_details):
+        room_number = room['number_in_room'] # Replace with your logic to get the room number
+        image_directory = os.path.join(settings.MEDIA_ROOT, 'room_images', hostel_name, room_number)
+
+        if os.path.exists(image_directory):
+            for filename in os.listdir(image_directory):
+                if filename.endswith(('.png', '.jpg', '.jpeg')):
+                    room_image_urls.append(os.path.join(settings.MEDIA_URL, 'room_images', hostel_name, room_number, filename))
+                    
+    print(room_image_urls)
     context = {
         'hostel': hostel,
+        'room_images': room_image_urls,
     }
     return render(request, template_name, context)
 

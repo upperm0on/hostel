@@ -8,6 +8,9 @@
                 <img src="{{ hostel.image.url }}" alt="hostel image here">
             </div>
             <div class="details">
+                {% for room_image in room_images%}
+                <img src="{{ room_image }}">
+            {% endfor %}
                 <ul class="list-inline">
                     <li class="list-inline-item name"><span>{{ hostel.name }}</span> </li>
                     <li class="list-inline-item">Location: <span>{{ hostel.location }}</span></li>
@@ -29,7 +32,9 @@
                             json_data.forEach(data => {
                                 element = document.createElement('li')
                                 element.classList.add("list-inline-item")
-                                element.innerHTML = `<a href='{% url "room_detail" hostel.name %}'>${data['number_in_room']} in a Room </a> at <strong>${data['price']}</strong> GHC `
+                                element.innerHTML = `<a href='{% url "room_detail" hostel.name %}'>${data['number_in_room']} in a Room </a> at <strong>${data['price']}</strong> GHC` + 
+                                ` <button type="button" class="btn btn-outline-secondary room_info_btn"> Apply </button>` + 
+                                `<div class="display_room_details"></div>` 
                                 append_here.appendChild(element)
                             })
                     </script>
@@ -56,4 +61,5 @@
             </div>
         </div>
     </div>
+<script src="{% static 'js/hq/detail_hostel.js' %}"></script>
 {% endblock content %}
