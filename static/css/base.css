@@ -1,95 +1,116 @@
 @import "./config.css";
 
 body {
-    background: var(--white);
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    top: 0;
-    left: 0;
-    font-family: var(--font1);
-    overflow-x: hidden;
+  background: var(--white);
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-family: var(--font1);
+  overflow-x: hidden;
 }
 
 nav {
-    width: 100vw;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 10px 20px;
-    box-shadow: 0px 0px 20px -10px var(--blue);
-    align-items: center;
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 10px 20px;
+  box-shadow: 0px 0px 20px -10px var(--blue);
+  align-items: center;
 }
 
 nav .list-inline .list-inline-item a {
-    font-weight: 500;
+  font-weight: 500;
+  color: var(--black3);
 }
 
+nav .list-inline .list-inline-item i {
+  margin-right: 5px; /* Space between icon and text */
+  color: var(--black3);
+}
+
+/* Updated button styles */
 nav .authentication .btn1 {
-    background: transparent;
-    border: 1px solid var(--blue);
-    color: var(--blue);
-    padding: 5px 15px;
-    border-radius: 15px;
-    font-weight: 500;
-    font-size: .85rem;
+  background: transparent;
+  border: 1px solid var(--blue);
+  color: var(--blue);
+  padding: 5px 15px;
+  border-radius: 15px;
+  font-weight: 500;
+  font-size: 0.85rem;
 }
 
 nav .authentication .btn2 {
-    background: var(--blue);
-    border: 1px solid var(--blue);
-    color: var(--white);
-    padding: 5px 15px;
-    border-radius: 15px;
-    font-weight: 500;
-    font-size: .85rem;
+  background: var(--blue);
+  border: 1px solid var(--blue);
+  color: var(--white);
+  padding: 5px 15px;
+  border-radius: 15px;
+  font-weight: 500;
+  font-size: 0.85rem;
 }
 
 main {
-    margin: 50px;
+  margin: 50px;
 }
 
 footer {
-    background: var(--blue);
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    color: var(--white2);
+  background: var(--blue);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  color: var(--white2);
 }
 
 footer .logo {
-    display: flex;
-    flex-direction: column;
-    margin: 0 auto;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  align-items: center;
 }
 
 footer .middle-side {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 }
 
 footer .middle-side .first-side .list-inline .list-inline-item {
-    margin: 5px;
-}
-
-footer .middle-side .first-side .list-inline .list-inline-item i {
-    font-size: 1.5rem;
-    cursor: pointer;
+  margin: 5px;
 }
 
 footer .middle-side .first-side .list-inline:nth-child(2) {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 footer .middle-side .second-side .list-inline {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
 }
 
 footer .small-quote {
-    align-self: center;
+  align-self: center;
+}
+
+.activated {
+  position: relative;
+}
+
+.activated * {
+    color: var(--black);
+}
+
+.activated::before {
+  content: "";
+  position: absolute;
+  top: 125%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 2px;
+  width: 50%;
+  background: var(--black3);
 }

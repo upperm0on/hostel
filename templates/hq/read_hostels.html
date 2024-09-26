@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% block active_hostel %} activated {% endblock active_hostel %} 
 {% block nav_btn_addition %}
     <button type="button"><a href="{% url 'add_hostel' %}">Add Hostel </a></button>
 {% endblock nav_btn_addition %}
@@ -7,7 +8,7 @@
     <link rel="stylesheet" href="{% static 'css/hq/read_hostels.css' %}">
     <section id="section2">
         <ul class="list-inline">
-            {% for hostel in hostels %}
+          {% for hostel in hostels %}
           <a href="{% url "detail_hostel" hostel.id %}" class="nav-link">
           <li class="list-inline-item card">
               <div class="three-dots">

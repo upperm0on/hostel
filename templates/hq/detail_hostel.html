@@ -1,65 +1,81 @@
-{% extends "base.html" %}
-{% load static %}
-{% block content %}
-<link rel="stylesheet" href="{% static 'css/hq/detail_hostel.css' %}">
-    <div class="hostel">
-        <div class="section_one">
-            <div class="img">
-                <img src="{{ hostel.image.url }}" alt="hostel image here">
-            </div>
-            <div class="details">
-                {% for room_image in room_images%}
-                <img src="{{ room_image }}">
-            {% endfor %}
-                <ul class="list-inline">
-                    <li class="list-inline-item name"><span>{{ hostel.name }}</span> </li>
-                    <li class="list-inline-item">Location: <span>{{ hostel.location }}</span></li>
-                    <li class="list-inline-item">Ratings: <span>{{ hostel.ratings }}</span></li>
-                    <li class="list-inline-item">Manager: <span>{{ hostel.manager }}</span></li>
-                    <li class="list-inline-item">Status: <span>{{ hostel.status }}</span></li>
-                </ul>
-            </div>
-        </div>
-        <div class="section">
-            <div class="section1">
-                <ul class="list-inline append_here">
-                    <span class="rooms-details">Room Details</span>
-                    {% if hostel.room_details %}
-                    <script type="application/json" class="room-details{{ hostel.id }}"> {{ hostel.room_details|safe }}</script>
-                    <script>
-                        append_here = document.querySelector('.append_here')
-                        json_data = JSON.parse(document.querySelector('.room-details{{ hostel.id }}').textContent)
-                            json_data.forEach(data => {
-                                element = document.createElement('li')
-                                element.classList.add("list-inline-item")
-                                element.innerHTML = `<a href='{% url "room_detail" hostel.name %}'>${data['number_in_room']} in a Room </a> at <strong>${data['price']}</strong> GHC` + 
-                                ` <button type="button" class="btn btn-outline-secondary room_info_btn"> Apply </button>` + 
-                                `<div class="display_room_details"></div>` 
-                                append_here.appendChild(element)
-                            })
-                    </script>
-                  {% endif %}
-                </ul>
-            </div>
-            <div class="section2">
-                <ul class="list-inline info">
-                    <span class="rooms-details">General Information</span>
-                    {% if hostel.additional_details %}
-                    <script type="application/json" class="room{{ hostel.id }}-additional_info"> {{ hostel.additional_details|safe }}</script>
-                    <script>
-                        append_here = document.querySelector('.info')
-                        json_data = JSON.parse(document.querySelector('.room{{ hostel.id }}-additional_info').textContent)
-                            json_data.forEach(data => {
-                            element = document.createElement('li')
-                            element.classList.add("list-inline-item")
-                            element.innerHTML = `${data}`
-                            append_here.appendChild(element)
-                            })
-                    </script>
-                  {% endif %}
-                </ul>
-            </div>
-        </div>
+{% extends "base.html" %} {% load static %} {% block active_hostel %} activated
+{% endblock active_hostel %} {% block content %}
+<link rel="stylesheet" href="{% static 'css/hq/detail_hostel.css' %}" />
+<div class="hostel">
+  <div class="section_one">
+    <div class="img">
+      <img src="{{ hostel.image.url }}" alt="hostel image here" />
     </div>
+    <div class="details">
+      <ul class="list-inline">
+        <li class="list-inline-item name"><span>{{ hostel.name }}</span></li>
+        <li class="list-inline-item">
+          Location: <span>{{ hostel.location }}</span>
+        </li>
+        <li class="list-inline-item">
+          Ratings: <span>{{ hostel.ratings }}</span>
+        </li>
+        <li class="list-inline-item">
+          Manager: <span>{{ hostel.manager }}</span>
+        </li>
+        <li class="list-inline-item">
+          Status: <span>{{ hostel.status }}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section1">
+      <ul class="list-inline append_here">
+        <span class="rooms-details">Room Details</span>
+        {% if hostel.room_details %}
+        <script type="application/json" class="room-details{{ hostel.id }}">
+          {{ hostel.room_details|safe }}
+        </script>
+        <script>
+          append_here = document.querySelector(".append_here");
+          json_data = JSON.parse(
+            document.querySelector(".room-details{{ hostel.id }}").textContent
+          );
+          json_data.forEach((data) => {
+            element = document.createElement("li");
+            element.classList.add("list-inline-item");
+            element.innerHTML =
+              `<a href='{% url "room_detail" hostel.name %}'>${data["number_in_room"]} in a Room </a> at <strong>${data["price"]}</strong> GHC` +
+              ` <button type="button" class="btn btn-outline-secondary room_info_btn" data-room-info='${data["number_in_room"]}' data-hostel-name='{{ hostel.name }}' data-room-image='${data["room_image"]}'> Apply </button>`;
+            append_here.appendChild(element);
+          });
+        </script>
+        {% endif %}
+      </ul>
+    </div>
+    <div class="section2">
+      <ul class="list-inline info">
+        <span class="rooms-details">General Information</span>
+        {% if hostel.additional_details %}
+        <script
+          type="application/json"
+          class="room{{ hostel.id }}-additional_info"
+        >
+          {{ hostel.additional_details|safe }}
+        </script>
+        <script>
+          append_here = document.querySelector(".info");
+          json_data = JSON.parse(
+            document.querySelector(".room{{ hostel.id }}-additional_info")
+              .textContent
+          );
+          json_data.forEach((data) => {
+            element = document.createElement("li");
+            element.classList.add("list-inline-item");
+            element.innerHTML = `${data}`;
+            append_here.appendChild(element);
+          });
+        </script>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</div>
 <script src="{% static 'js/hq/detail_hostel.js' %}"></script>
 {% endblock content %}

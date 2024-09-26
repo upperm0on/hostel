@@ -61,7 +61,7 @@ def add_hostel(request):
 def read_hostel(request): 
     hostels = Hostel.objects.all().order_by("-ratings")
     
-    stars_list = [one_star, two_star, three_star, four_star, five_star]  # List of star rating models
+    stars_list = [one_star, two_star, three_star, four_star, five_star]  
 
     for obj in hostels: 
         total_star = 0 
@@ -120,8 +120,9 @@ def search_hostel(request, rooms):
 def detail_hostel(request, id): 
     template_name = 'hq/detail_hostel.html'
     hostel = Hostel.objects.get(id=id)
-        # Retrieve the images for display (this is just an example)
     hostel_name = hostel.name  # Replace with your logic to get the hostel name
+
+    print(hostel.room_details)
 
     room_image_urls = []
     for room in json.loads(hostel.room_details):

@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Lobster+Two:ital,wght@0,400;0,700;1,400;1,700&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Lobster+Two:ital,wght@0,400;0,700;1,400;1,700&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
 
 * {
   scroll-behavior: smooth;
@@ -31,49 +30,50 @@ body {
   scrollbar-color: #c1c1c1 transparent; /* thumb color and track color */
 }
 
-
 .open-sans {
-    font-family: "Open Sans", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 400;
-    font-style: normal;
-    font-variation-settings:
-      "width" 100;
-  }
-  
-.playfair-display {
-    font-family: "Playfair Display", serif;
-    font-optical-sizing: auto;
-    font-weight: 400;
-    font-style: normal;
-  }
-
-  .lobster-two-regular {
-    font-family: "Lobster Two", sans-serif;
-    font-weight: 400;
-    font-style: normal;
-  }
-
-  * {
-    font-size: .90rem;
-  }
-  
-:root {
-    --red: #c40e2d;
-    --blue: #050505;
-    --black: #050505;
-    --black2: #333333;
-    --green: #2c7a6c;
-    --yellow: #edab18;
-    --white: #f5f6f8;
-    --white2: #bfbfc1;
-    --font: 'Playfair Display';
-    --font1: 'Open Sans';
-    --font2: 'Lobster Two';
+  font-family: "Open Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings: "width" 100;
 }
 
-*, ::before, ::after {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+.playfair-display {
+  font-family: "Playfair Display", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.lobster-two-regular {
+  font-family: "Lobster Two", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+* {
+  font-size: 0.9rem;
+}
+
+:root {
+  --red: #c40e2d;
+  --blue: #050505;
+  --black: #050505;
+  --black2: #333333;
+  --black3: #575757;
+  --green: #2c7a6c;
+  --yellow: #edab18;
+  --white: #f5f6f8;
+  --white2: #bfbfc1;
+  --font: "Playfair Display";
+  --font1: "Open Sans";
+  --font2: "Lobster Two";
+}
+
+*,
+::before,
+::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
