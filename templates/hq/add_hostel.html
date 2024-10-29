@@ -4,23 +4,33 @@
     <link rel="stylesheet" href="{% static 'css/hq/add_hostel.css' %}">
     <form action="." method="POST" id="form" enctype="multipart/form-data">
         {% csrf_token %}
-        <ul class="list-inline">
-            <li class="list-inline-item">
-                {{ form.as_p }}
-            </li>
-            <li class="list-inline-item">
-                <div class="add_info_center"></div>
-                <button type="button" class="add_info">Additional Info </button>
-            </li>
-            <li class="list-inline-item">
-                <div class="add_room_details_center"></div>
-                <button type="button" class="add_room_detail">Rooms Information</button>
-            </li>
+        
+        <!-- Hostel Details Section -->
+        <div class="form-obj">
+            <h4 class='text-center mb-3'>Hostel Details</h4> <!-- Title for general hostel details -->
+            {{ form.as_p }} <!-- Contains fields like name, location, status, category -->
+        </div>
+        
+        <!-- Additional Info Section -->
+        <div class="form-obj">
+            <h4 class='text-center m-3'>General Amenities</h4>
+            <div class="add_info_center"></div>
+            <center><button type="button" class="add_info">Additional Info</button></center>
+        </div>
+        
+        <!-- Room Details Section -->
+        <div class="form-obj">
+            <h4 class='text-center m-3'>Room Details</h4>
+            <div class="add_room_details_center"></div>
+            <center><button type="button" class="add_room_detail">Rooms Information</button></center>
+        </div>
+        
+        <!-- Submission Section -->
+        <div class="form-obj">
+            <input type="hidden" name="hidden_data" class="hidden_data" value="0">
+            <input type="hidden" name="hidden_info_data" class="hidden_info_data" value="0">
             <button type="submit" class="submit">Submit</button>
-
-        </ul>
-        <input type="hidden" name="hidden_data" class="hidden_data" value="0">
-        <input type="hidden" name="hidden_info_data" class="hidden_info_data" value="0">
+        </div>
     </form>
 
     <script src="{% static 'js/hq/add_hostel.js' %}"></script>

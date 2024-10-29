@@ -19,15 +19,76 @@ add_btn.addEventListener("click", () => {
 
 // Add event listener for the "add_room_detail" button
 room_info.addEventListener("click", () => {
-  element = document.createElement("div");
+  const element = document.createElement("div");
   element.classList.add("add_info_item");
-  element.innerHTML =
-    "<input type='number' class='add_room_number' placeholder='How many in a Room?'/> <input type='number' class='quantity' name='quantity' placeholder='How many rooms?'/> price <input class='price' type='number' placeholder='Price'> <input type='file' name='room_image' class='room_image'>";
+  element.innerHTML = `
+      <input type='number' class='add_room_number' placeholder='How many in a Room?'/>
+      <input type='number' class='quantity' name='quantity' placeholder='How many rooms?'/>
+      <input class='price' type='number' placeholder='Price'>
+      <input type='file' name='room_image' class='room_image'>
+      <button type='button' class='room_amenity_btn'>Add Amenity</button>
+      <input type='hidden' value='' class='room_amenities_hidden'>
+  `;
   add_room_info.appendChild(element);
+
+  const second_element = document.createElement('div');
+  second_element.classList.add('room_amenity_loc');
+  add_room_info.appendChild(second_element);
+
+  const amenity_btn = element.querySelector('.room_amenity_btn');
+
+  amenity_btn.addEventListener('click', () => {
+      // Create a popup for amenities
+      const dialog = document.createElement('div');
+      dialog.classList.add('amenity-dialog');
+      dialog.innerHTML = `
+          <div class='amenity-inputs'></div>
+          <button type='button' class='add_item_btn'>Add Item</button>
+          <button type='button' class='done_btn'>Done</button>
+      `;
+      document.body.appendChild(dialog);
+
+      const add_item_btn = dialog.querySelector('.add_item_btn');
+      const done_btn = dialog.querySelector('.done_btn');
+      const amenityInputsContainer = dialog.querySelector('.amenity-inputs');
+
+      // Function to add a new input field
+      function addAmenityInput() {
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.classList.add('room_amenity_item');
+          input.placeholder = 'Enter Amenity';
+          amenityInputsContainer.appendChild(input);
+      }
+
+      // Add the first input by default
+      addAmenityInput();
+
+      // Event listener for adding more input fields
+      add_item_btn.addEventListener('click', addAmenityInput);
+
+      // Event listener for the done button
+      done_btn.addEventListener('click', () => {
+          const hiddenInput = document.querySelector('.room_amenities_hidden');
+          hiddenInput.value = ''; // Clear previous values
+
+          // Collect all amenities
+          const amenities = Array.from(amenityInputsContainer.querySelectorAll('.room_amenity_item'))
+              .map(input => input.value)
+              .filter(value => value) // Filter out empty values
+
+          hiddenInput.value = amenities.join(', '); // Join values and set to hidden input
+
+          // Close the dialog
+          document.body.removeChild(dialog);
+      });
+  });
 });
+
 
 // Initialize an empty array to store room details
 var rooms_details = [];
+
 
 // Add event listener for the submit button
 submit_btn.addEventListener("click", (e) => {

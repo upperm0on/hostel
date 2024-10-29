@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
     contentSection.innerHTML = `
             <h3>Room Information</h3>
             <p><strong>Price:</strong> ${room.dataset.price} GHC</p>
-            <p><strong>Amenities:</strong> ${room.dataset.amenities}</p>
+            <p><strong>Amenities:</strong> ${room.dataset.amenities}</p> 
             <p><strong>Rules:</strong> ${room.dataset.rules}</p>
         `;
 

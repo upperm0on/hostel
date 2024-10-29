@@ -42,7 +42,7 @@
             element.classList.add("list-inline-item");
             element.innerHTML =
               `<a href='{% url "room_detail" hostel.name %}'>${data["number_in_room"]} in a Room </a> at <strong>${data["price"]}</strong> GHC` +
-              ` <button type="button" class="btn btn-outline-secondary room_info_btn" data-room-info='${data["number_in_room"]}' data-hostel-name='{{ hostel.name }}' data-room-image='${data["room_image"]}'> Apply </button>`;
+              ` <button type="button" class="btn btn-outline-secondary room_info_btn" data-room-info='${data["number_in_room"]}' data-price="${data['price']}" data-hostel-name='{{ hostel.name }}' data-room-image='${data["room_image"]}'> Apply </button>`;
             append_here.appendChild(element);
           });
         </script>
