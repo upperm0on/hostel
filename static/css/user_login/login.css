@@ -1,0 +1,53 @@
+@import url(../config.css);
+
+form {
+    position: absolute;
+    top: 75%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 30px 50px;  /* Added width to padding for a roomier feel */
+    border-radius: 25px;
+    background: var(--white);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2); /* Softer shadow for depth */
+    border: 1px solid rgba(0, 0, 0, 0.1); /* Subtle border to define edges */
+}
+
+form p {
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+}
+
+form p label {
+    font-family: var(--font1);
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+form p input {
+    height: 40px;
+    width: 300px;
+    border: none;
+    background: transparent;
+    border-bottom: 2px solid var(--black);
+    padding: 10px;
+}
+
+form p input:focus {
+    outline: none;
+}
+
+form button {
+    padding: 5 15;
+    border-radius: 15px;
+    border: 2px solid var(--black);
+    background: transparent;
+    color: var(--black);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2); /* Softer shadow for depth */
+}
+
+footer {
+    position: absolute;
+    top: 90vh;
+    left: 0;
+    width: 100vw;
+}

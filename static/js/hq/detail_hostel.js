@@ -1,9 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
-  var view_room_btn = document.querySelectorAll(".room_info_btn");
+  const view_room_btn = document.querySelectorAll(".room_info_btn");
 
   view_room_btn.forEach((room) => {
-    // Create overlay (for dark background effect)
-    let overlay = document.createElement("div");
+    // Create overlay for the dark background effect
+    const overlay = document.createElement("div");
     overlay.style.position = "fixed";
     overlay.style.top = "0";
     overlay.style.left = "0";
@@ -12,12 +12,10 @@ document.addEventListener("DOMContentLoaded", () => {
     overlay.style.backgroundColor = "rgba(0, 0, 0, 0.6)";
     overlay.style.zIndex = "999";
     overlay.style.display = "none"; // Hidden by default
-
-    // Append the overlay to the body
     document.body.appendChild(overlay);
 
     // Create the modal (dialogue box)
-    let dialogue = document.createElement("div");
+    const dialogue = document.createElement("div");
     dialogue.style.position = "fixed";
     dialogue.style.left = "50vw";
     dialogue.style.top = "50vh";
@@ -30,9 +28,10 @@ document.addEventListener("DOMContentLoaded", () => {
     dialogue.style.overflowY = "auto"; // Enable vertical scroll for the modal
     dialogue.style.zIndex = "1000";
     dialogue.style.display = "none"; // Hidden by default
+    document.body.appendChild(dialogue);
 
     // Create a close button
-    let closeButton = document.createElement("button");
+    const closeButton = document.createElement("button");
     closeButton.innerHTML = "&times;";
     closeButton.style.position = "absolute";
     closeButton.style.top = "10px";
@@ -43,7 +42,6 @@ document.addEventListener("DOMContentLoaded", () => {
     closeButton.style.cursor = "pointer";
     closeButton.style.color = "#333";
 
-    // Add click event to close the modal and remove overlay
     const closeModal = () => {
       dialogue.style.display = "none";
       overlay.style.display = "none";
@@ -53,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
     closeButton.addEventListener("click", closeModal);
 
     // Set the content for the modal (image and room details)
-    let roomImage = document.createElement("img");
+    const roomImage = document.createElement("img");
     roomImage.src = `/media/room_images/${room.dataset.hostelName}/${room.dataset.roomInfo}/${room.dataset.roomImage}`;
     roomImage.alt = "Room Image";
     roomImage.style.width = "60%"; // Occupies 60% of the modal
@@ -62,25 +60,39 @@ document.addEventListener("DOMContentLoaded", () => {
     roomImage.style.float = "left";
 
     // Create a content section for the text (room details)
-    let contentSection = document.createElement("div");
+    const contentSection = document.createElement("div");
     contentSection.style.padding = "20px";
     contentSection.style.width = "40%"; // The rest of the modal
     contentSection.style.float = "right";
 
+    // Parse amenities from the dataset
+    const roomAmenities = JSON.parse(room.dataset.amenities);
+    
+    // Create amenities list and populate it
+    const amenityList = document.createElement("ul");
+    roomAmenities.forEach((amenity) => {
+      const listItem = document.createElement("li");
+      listItem.textContent = amenity;
+      amenityList.appendChild(listItem);
+    });
+
+    // Add room details to the content section, including amenities list
     contentSection.innerHTML = `
-            <h3>Room Information</h3>
-            <p><strong>Price:</strong> ${room.dataset.price} GHC</p>
-            <p><strong>Amenities:</strong> ${room.dataset.amenities}</p> 
-            <p><strong>Rules:</strong> ${room.dataset.rules}</p>
-        `;
+      <h3>Room Information</h3>
+      <p><strong>Price:</strong> ${room.dataset.price} GHC</p>
+      <p><strong>Amenities:</strong></p>
+    `;
+    contentSection.appendChild(amenityList); // Append the amenities list below the "Amenities" label
+
+    // Add additional room information (e.g., rules)
+    const rulesParagraph = document.createElement("p");
+    rulesParagraph.innerHTML = `<button type='button' class='confirm_purchase btn btn-warning m-3' onclick="alert('Transanction has begun')">Confirm Purchase</button>`;
+    contentSection.appendChild(rulesParagraph);
 
     // Append the image, content section, and close button to the modal
     dialogue.appendChild(roomImage);
     dialogue.appendChild(contentSection);
     dialogue.appendChild(closeButton);
-
-    // Append the modal to the body
-    document.body.appendChild(dialogue);
 
     // Show the modal and overlay when the button is clicked
     room.addEventListener("mouseup", () => {

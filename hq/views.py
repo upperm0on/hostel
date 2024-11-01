@@ -36,7 +36,7 @@ def add_hostel(request):
             
             for room_image in room_images:
                 # Create the path for saving images
-                room_image_path = os.path.join(settings.MEDIA_ROOT, 'room_images', instance.name, room_details[0]['number_in_room'])
+                room_image_path = os.path.join(settings.MEDIA_ROOT, 'room_images', instance.name, room_details['number_in_room'])
                 os.makedirs(room_image_path, exist_ok=True)  # Create directory if it doesn't exist
                 
                 # Save the image
@@ -103,19 +103,27 @@ def update_hostel(request, id):
 def search_hostel(request, rooms): 
     template_name = "hq/search_hostels.html"
     objects = Hostel.objects.all().order_by("-ratings")
-    queryset = list()
+    queryset = []
+
     for obj in objects:
-        if obj.room_details: 
-            room_details = json.loads(obj.room_details)
-            for room in room_details: 
-                if int(room["number_in_room"]) == int(rooms): 
-                    print(obj.name)
-                    query = Hostel.objects.get(id=obj.id)
-                    queryset.append(query) 
+        try:
+            if obj.room_details: 
+                room_details = json.loads(obj.room_details)
+                
+                for room in room_details:
+                    if int(room.get("number_in_room", 0)) == int(rooms):  # Use .get to avoid KeyError
+                        print(obj.name)
+                        queryset.append(obj)  # Append obj directly instead of re-querying
+                        break  # Stop inner loop once a match is found for efficiency
+        except (json.JSONDecodeError, ValueError) as e:
+            print(f"Error parsing room details for hostel {obj.name}: {e}")
+            continue  # Skip this hostel if there's a JSON parsing or value error
+
     context = {
-        'hostels' : queryset,
+        'hostels': queryset,
     }
     return render(request, template_name, context)
+
 
 def detail_hostel(request, id): 
     template_name = 'hq/detail_hostel.html'

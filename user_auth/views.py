@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 # Create your views here.
 def user_signup(request):
     template = 'user_login/login.html'
-
+    message = 'Sign Up Here'
     forms = View_user_signup() 
     if request.method == "POST":
         forms = View_user_signup(request.POST)
@@ -25,12 +25,13 @@ def user_signup(request):
                 return redirect('/dashboard/')
     context = {
         'forms' : forms,
+        'msg': message,
     }
     return render(request, template, context)
 
 def user_login(request):
     template = 'user_login/login.html'
-
+    message = 'Login Here'
     forms = View_user_login() 
     if request.method == "POST":
         forms = View_user_login(request.POST)
@@ -45,6 +46,7 @@ def user_login(request):
             print(user)
     context = {
         'forms' : forms,
+        'msg': message,
     }
     return render(request, template, context)
 

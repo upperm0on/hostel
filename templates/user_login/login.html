@@ -1,8 +1,11 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
+<link rel='stylesheet' href='{% static "css/user_login/login.css" %}'>
     <form action="." method="POST">
+        <h4 class='text-center text-dark m-4'>{{ msg }}</h4>
         {% csrf_token %}
         {{ forms.as_p }}
-     <button type="submit">Submit</button>
+     <center><button type="submit" class='m-4'>Submit</button></center>
     </form>
 {% endblock content %}
