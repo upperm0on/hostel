@@ -15,47 +15,49 @@ from ratings.models import (
 import json
 # Create your views here.
 
-def add_hostel(request): 
-    form = Views_addHostel() 
-    if request.method == "POST": 
+def add_hostel(request):
+    form = Views_addHostel()
+    if request.method == "POST":
         form = Views_addHostel(request.POST, request.FILES)
         if form.is_valid():
             instance = form.save(commit=False)
-            hidden_data = request.POST['hidden_data']
-            add_info_data = request.POST['hidden_info_data']
-            
-            # Get the list of room images
-            room_images = request.FILES.getlist('room_image')
-            print(room_images) 
-            
-            # Parse hidden data if necessary
-            room_details = json.loads(hidden_data)
-            
+            hidden_data = request.POST.get('hidden_data', '[]')  # Default to empty list JSON
+
+            try:
+                room_details = json.loads(hidden_data)
+                print("Parsed room details:", room_details)
+            except json.JSONDecodeError as e:
+                print(f"Error parsing JSON: {e}")
+                room_details = []
+
             instance.room_details = hidden_data
-            instance.additional_details = add_info_data
-            
+            instance.additional_details = request.POST.get('hidden_info_data', '')
+
+            room_images = request.FILES.getlist('room_image')
+            print("Room images:", room_images)
+
+            count = 0
             for room_image in room_images:
-                # Create the path for saving images
-                room_image_path = os.path.join(settings.MEDIA_ROOT, 'room_images', instance.name, room_details['number_in_room'])
-                os.makedirs(room_image_path, exist_ok=True)  # Create directory if it doesn't exist
-                
-                # Save the image
+                room_number = str(room_details[count]['number_in_room']) if isinstance(room_details, list) and count < len(room_details) else str(count)
+
+                room_image_path = os.path.join(settings.MEDIA_ROOT, 'room_images', instance.name, room_number)
+                os.makedirs(room_image_path, exist_ok=True)
+
                 try:
-                    with open(os.path.join(room_image_path, room_image.name), 'wb+') as destination:
+                    image_path = os.path.join(room_image_path, room_image.name)
+                    with open(image_path, 'wb+') as destination:
                         for chunk in room_image.chunks():
                             destination.write(chunk)
+                    print(f"Image saved at: {image_path}")
                 except Exception as e:
                     print(f"Error saving image {room_image.name}: {e}")
-                    # Optionally handle the error (e.g., log it or notify the user)
-            
-            instance.save()  # Save the hostel instance after processing
-            # Redirect or render a success message as needed
-            return redirect('read_hostels')  # Update with the actual URL
-            
-    context = {
-        'form': form,
-    }
-    return render(request, 'hq/add_hostel.html', context)
+
+                count += 1
+
+            instance.save()
+            return redirect('read_hostels')
+
+    return render(request, 'hq/add_hostel.html', {'form': form})
 
 
 def read_hostel(request): 
