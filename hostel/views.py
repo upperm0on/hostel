@@ -1,8 +1,12 @@
 from django.shortcuts import render
+from hq.models import Hostel
 
 def dashboard(request):
+    hostels = Hostel.objects.all().order_by('-ratings')
     template_name = "dashboard.html"
-    context = {}
+    context = {
+        'hostels': hostels,
+    }
     return render(request, template_name, context)
 
 def landingPage(request): 

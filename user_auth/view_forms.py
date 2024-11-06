@@ -10,7 +10,8 @@ class View_user_signup(forms.Form):
     ))
     confirm_password = forms.CharField(widget=forms.PasswordInput(
         attrs = {
-            'type' : 'password'
+            'type' : 'password',
+            'required': '',
         }
     )) 
 

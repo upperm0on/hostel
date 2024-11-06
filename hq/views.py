@@ -150,8 +150,3 @@ def detail_hostel(request, id):
         'room_images': room_image_urls,
     }
     return render(request, template_name, context)
-
-def room_details(request, name): 
-    template_name = 'hq/room_detail.html'
-    context = {}
-    return render(request, template_name, context)

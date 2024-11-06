@@ -1,0 +1,221 @@
+@import url('../css/config.css');
+
+main {
+    display: flex;
+    flex-direction: column;
+}
+
+#section1 {
+    width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#section1 .section_msg {
+    display: flex;
+    flex-direction: column;
+}
+
+#section1 .section_msg #first {
+    font-size: 3.5rem;
+    font-weight: 600;
+    font-family: var(--font);
+    color: var(--black);
+}
+
+#section1 .section_msg #second{
+    align-self: center;
+    font-weight: 400;
+    font-size: 1.5rem;
+    font-family: var(--font);
+}
+
+#section1 .section_msg #second a {
+    font-weight: 600;
+    font-size: 1.5rem;
+    font-family: var(--font2);
+    text-decoration: none;
+}
+
+#section1 .section_img img {
+    height: 450px;
+    width: 600px;
+    border-radius: 15px;
+}
+
+#recommended_hostels p {
+    font-size: 2rem;
+    font-family: var(--font2);
+    text-transform: capitalize;
+    color: var(--black2);
+}
+
+#recommended_hostels {
+    margin: 0 auto;
+    overflow: hidden;
+    width: 90%;
+    padding: 10px 30px;
+}
+
+#section2 {
+    display: flex;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+    margin: 10px 10px;
+    scrollbar-width: none;
+    transition: 200ms ease;
+}
+
+#section2:hover {
+    scrollbar-width: auto;
+    transition: 200ms ease;
+}
+
+#section2:hover::-webkit-scrollbar {
+    display: block;
+    transition: 200ms ease;
+}
+
+#section2::-webkit-scrollbar {
+    display: none;
+}
+
+#section2 .list-inline {
+    margin-top: 30px;
+    float: left;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    width: 95vw;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+}
+
+#section2 .list-inline::-webkit-scrollbar {
+    display: none;
+}
+
+#section2 .list-inline .list-inline-item {
+    height: 200px;
+    width: 22.5vw;
+    max-width: 350px;
+    border-radius: 15px;
+    overflow: hidden;
+    border: none;
+    margin-bottom: 10px;
+    margin-right: .75vw;
+    cursor: pointer;
+    transition: 300ms ease;
+}
+
+#section2 .list-inline .list-inline-item:hover {
+    transform: scale(1.05);
+    transition: 300ms ease;
+}
+
+#section2 .list-inline .list-inline-item .image {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    position: relative;
+}
+
+#section2 .list-inline .list-inline-item .image::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(0deg, var(--blue), transparent);
+    z-index: 1;
+}
+
+#section2 .list-inline .list-inline-item .image img {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%)
+}
+
+#section2 .list-inline .list-inline-item .display-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--white2);
+    z-index: 2;
+    padding: 5px;
+    width: 100%;
+}
+
+#section2 .list-inline .list-inline-item .display-info .details-item {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+#section2 .list-inline .list-inline-item .display-info .details-item span {
+    color: var(--white);
+}
+
+#section2 .list-inline .list-inline-item .display-info .room-info2 span {
+    color: var(--white);
+}
+
+#section2 .list-inline .list-inline-item .display-info .room-info2 {
+    list-style: none;
+    font-size: .85rem;
+    float: right;
+}
+
+#section2 .list-inline .list-inline-item .info1 {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background: var(--black2);
+    z-index: 3;
+    align-items: center;
+    padding-top: 30px;
+    list-style: none;
+    color: var(--white2);
+    transition: left 300ms ease;
+}
+
+#section2 .list-inline .list-inline-item .info1 .title {
+    font-family: var(--font2);
+    font-size: 1.5rem;
+    color: var(--white);
+    position: relative;
+    margin-bottom: 30px;
+}
+
+#section2 .list-inline .list-inline-item .info1 .title::before{
+    content: '';
+    height: 2px;
+    width: 30%;
+    background: var(--white);
+    position: absolute;
+    top: 125%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#section2 .list-inline .list-inline-item .three-dots {
+    position: absolute;
+    top: 10%;
+    left: 90%;
+    color: var(--white);
+    padding: 8px;
+    cursor: pointer;
+    z-index: 4;
+}

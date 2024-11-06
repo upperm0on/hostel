@@ -1,6 +1,19 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block content %}
-    This is the dashboard
-     {{ request.user.username }}
+    <link rel='stylesheet' href='{% static "css/dashboard.css" %}'>
+    <section id='section1' class='mb-3'>
+        <div class="section_msg">
+            <p id='first'>You are currently not in any Hostel</p>
+            <p id='second'>Find one that suits your needs <a href='{% url "read_hostels" %}' class='nav-linked'> Here </a></p>
+        </div>
+        <div class='section_img'>
+            <img src='{% static "images/potential.png" %}' alt='This is the section img'>
+        </div>
+    </section>
+    <section id='recommended_hostels'>
+        <p>recommended hostels </p>
+        {% include "./hq/hostel_template.html" %}
+    </section>
+    <script src='{% static "js/hq/read_hostel.js" %}'></script>
 {% endblock content %}

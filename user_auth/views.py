@@ -32,6 +32,7 @@ def user_signup(request):
 def user_login(request):
     template = 'user_login/login.html'
     message = 'Login Here'
+    error_msg = ''
     forms = View_user_login() 
     if request.method == "POST":
         forms = View_user_login(request.POST)
@@ -43,10 +44,17 @@ def user_login(request):
             if user is not None: 
                 login(request, user)
                 return redirect('/dashboard/')
-            print(user)
+            else: 
+                error_msg = 'The Username or Password was invalid or not found in the database'
     context = {
         'forms' : forms,
         'msg': message,
+        'error_msg': error_msg,
     }
     return render(request, template, context)
+
+def user_logout(request):
+    logout(request)
+    return redirect('landing_page')
+    
 
