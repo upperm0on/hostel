@@ -5,7 +5,6 @@ from django.contrib.auth import authenticate, login
  
 # Create your views here.
 def create_consumer(request):
-
     context = {
     }
     return render(request, 'consumer/create_consumer.html', context)

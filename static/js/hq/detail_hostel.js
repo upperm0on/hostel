@@ -84,12 +84,41 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
     contentSection.appendChild(amenityList); // Append the amenities list below the "Amenities" label
 
-    // Add additional room information (e.g., rules)
-    const rulesParagraph = document.createElement("p");
-    rulesParagraph.innerHTML = `<button type='button' class='confirm_purchase btn btn-warning m-3' onclick="alert('Transanction has begun')">Confirm Purchase</button>`;
-    contentSection.appendChild(rulesParagraph);
+    // Create the confirm purchase button
+    const confirmButton = document.createElement("button");
+    confirmButton.type = "button";
+    confirmButton.classList.add("confirm_purchase", "btn", "btn-warning", "m-3");
+    confirmButton.textContent = "Confirm Purchase";
 
-    // Append the image, content section, and close button to the modal
+    // Event listener for the confirm button
+    confirmButton.addEventListener("click", () => {
+      const hostelId = room.dataset.hostelName; // Retrieve hostel_id from data attribute
+      const room_id = room.dataset.roomInfo
+
+      // Send a POST request with hostel_id to set session variable
+      fetch(`/hq/confirm_payment/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": getCookie("csrftoken"),  // CSRF token is necessary for secure requests
+        },
+        body: JSON.stringify({ confirm: true, hostel_id: hostelId, room_id: room_id })  // Include hostel_id in the payload
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.message) {
+          alert(data.message);  // Alert success message
+          closeModal();  // Close the modal after confirmation
+        } else {
+          alert("An error occurred.");
+        }
+      })
+      .catch(error => console.error("Error:", error));
+      window.location.href = '/dashboard/'
+    });
+
+    // Append elements to contentSection and dialogue
+    contentSection.appendChild(confirmButton);
     dialogue.appendChild(roomImage);
     dialogue.appendChild(contentSection);
     dialogue.appendChild(closeButton);
@@ -105,3 +134,12 @@ document.addEventListener("DOMContentLoaded", () => {
     overlay.addEventListener("click", closeModal);
   });
 });
+
+// Helper function to get the CSRF token from cookies
+function getCookie(name) {
+  const cookieValue = document.cookie
+    .split("; ")
+    .find(row => row.startsWith(name + "="))
+    ?.split("=")[1];
+  return cookieValue;
+}

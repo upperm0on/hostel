@@ -2,6 +2,7 @@
 {% load static %}
 {% block content %}
     <link rel='stylesheet' href='{% static "css/dashboard.css" %}'>
+    {% if not consumer %}
     <section id='section1' class='mb-3'>
         <div class="section_msg">
             <p id='first'>You are currently not in any Hostel</p>
@@ -15,5 +16,72 @@
         <p>recommended hostels </p>
         {% include "./hq/hostel_template.html" %}
     </section>
-    <script src='{% static "js/hq/read_hostel.js" %}'></script>
+    {% else %}
+    <div class="container">
+        <div class="profile-header">
+            <h2 class="playfair-display">Booking Details</h2>
+            <p class="info-text open-sans">Find your booking and accommodation details below.</p>
+        </div>
+      
+        <div class="main-content">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="section-title lobster-two-regular">Your Manager</h3>
+                    <p class="info-text"><strong>Name:</strong> {{ consumer.hostel.manager.name }}</p>
+                    <p class="info-text"><strong>Contact:</strong> {{ consumer.hostel.manager.contact }}</p>
+                    <p class="info-text"><strong>Email:</strong> {{ consumer.hostel.manager.email }}</p>
+                    <a href="mailto:{{ consumer.hostel.manager.email }}" class="btn btn-primary">Contact Host</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="{{ consumer.hostel.image.url }}" alt="Hostel Image" class="img-fluid">
+                <div class="card-body">
+                    <h3 class="section-title lobster-two-regular">{{ consumer.hostel.name }}</h3>
+                    <p class="info-text"><strong>Location:</strong> {{ consumer.hostel.location }}</p>
+                    <p class="info-text"><strong>Check-In:</strong> {{ consumer.check_in }}</p>
+                    <p class="info-text"><strong>Check-Out:</strong> {{ consumer.check_out }}</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body" id="roomDetailsContainer">
+                </div>
+            </div>
+
+        </div>
+    {% endif %}
+    
+    <script>
+        const roomDetailsContainer = document.querySelector('#roomDetailsContainer');
+
+        // Get room data (this is your room details JSON)
+        const room = {{ consumer.hostel.room_details|safe }};
+        
+        // Loop through each room data and display it
+        room.forEach(r => {
+            console.log(r.number_in_room);  // Log the number_in_room for each room
+            
+            // Check if the room matches the consumer's room_id
+            if (r.number_in_room == {{ consumer.room_id }}) {
+                const roomCard = document.createElement('div');
+                roomCard.classList.add('mb-3');
+                roomCard.innerHTML = `
+                    <div class="card-body">
+                        <div class="room-images">
+                            <img src="/media/room_images/{{ consumer.hostel.name }}/{{ consumer.room_id }}/${r.room_image[0]}" alt="Room Image" class="img-fluid" />
+                        </div>
+                        <h4 class="section-title lobster-two-regular m-3">Room Type: ${r.number_in_room} in a room</h4>
+                        <p class="info-text"><strong>Price per Year:</strong> $${r.price}</p>
+                        <h5>Amenities:</h5>
+                        <ul class="list-unstyled">
+                            ${JSON.parse(r.amenities).map(amenity => `<li>${amenity}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+                roomDetailsContainer.appendChild(roomCard);
+            }
+        });
+    </script>
+
 {% endblock content %}

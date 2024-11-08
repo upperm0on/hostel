@@ -1,6 +1,10 @@
 from django.shortcuts import render, redirect
+from django.http import JsonResponse
 from django.conf import settings
 import os
+
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 
 from .models import Hostel
 from .add_hostel_forms import Views_addHostel
@@ -14,6 +18,7 @@ from ratings.models import (
 
 import json
 # Create your views here.
+
 
 def add_hostel(request):
     form = Views_addHostel()
@@ -150,3 +155,34 @@ def detail_hostel(request, id):
         'room_images': room_image_urls,
     }
     return render(request, template_name, context)
+
+from consumers.models import Consumer
+@csrf_exempt  # CSRF exemption, if you handle it in another way
+def confirm_payment(request):
+    if request.method == 'POST':
+            # Get the JSON data from the request body
+        data = json.loads(request.body)
+        confirm = data.get('confirm')
+        hostel_id = data.get('hostel_id')
+        room_id = data.get('room_id')
+
+        consumer = Consumer() 
+
+        hostel = Hostel.objects.get(name=hostel_id)
+        consumer.user = request.user 
+        consumer.hostel = hostel 
+        consumer.room_id = room_id
+        consumer.save()
+
+        # Make sure we received the necessary data
+        if confirm and hostel_id:
+            # Store the hostel_id in the session to indicate the payment confirmation
+            request.session['payment_confirmed'] = hostel_id
+            print('Payment has been confirmed, hostel ID stored in session.')
+        else:
+            print('error')
+
+        if request.session.get('payment_confirmed'):
+            return redirect('/dashboard/')
+
+    return redirect('/dashboard/')
