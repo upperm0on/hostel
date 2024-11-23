@@ -1,10 +1,11 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block content %}
+    <link rel='stylesheet' href="{% static 'css/user_login/login.css' %}" />
     <form action="." method="POST">
         {% csrf_token %}
-        {{ forms.as_p }}
-        <button type="submit">Submit</button>
+        <button type='submit' class='btn btn-outline-primary' name='agree_manager'>Accept Terms and Conditions </button>
+        <button type='button' class='btn btn-danger'>Decline</button>
     </form>
 
 {% endblock content %}

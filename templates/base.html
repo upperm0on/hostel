@@ -20,7 +20,7 @@
   <body>
     <nav>
       <div class="logo">
-        <img src="#" alt="Logo Here" />
+        <img src="{% static 'images/logo.svg' %}" alt="Logo Here" height='50px' width='auto'/>
       </div>
       <ul class="list-inline">
         <li class="list-inline-item">
@@ -37,27 +37,12 @@
             ><i class="fa-solid fa-building"></i> Hostels</a
           >
         </li>
-        <li class="list-inline-item">
-          <a href="#" class="nav-link"
-            ><i class="fa-solid fa-concierge-bell"></i> Services</a
-          >
-        </li>
-        <li class="list-inline-item">
-          <a href="#" class="nav-link"
-            ><i class="fa-solid fa-info-circle"></i> About</a
-          >
-        </li>
-        <li class="list-inline-item">
-          <a href="#" class="nav-link"
-            ><i class="fa-solid fa-phone"></i> Contact Us</a
-          >
-        </li>
       </ul>
       {% if request.user.is_authenticated %}
       <div class='authentication'>
       <button type="button" class="btn1">
-        <a href="{% url 'dashboard' %}" class="nav-link"
-          ><i class="fa-solid fa-user"></i> Profile | {{ request.user.username }} </a
+        <a href="{% url 'dashboard' %}" class="nav-link" style='font-family: var(--font2); font-weight: 500;'
+          ><i class="fa-solid fa-user"></i>  {{ request.user.username|capfirst }} </a
         >
       </button>
       <button type="button" class="btn2">

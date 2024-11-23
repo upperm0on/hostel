@@ -16,9 +16,9 @@ from ratings.models import (
     one_star
 )
 
-import json
-# Create your views here.
+from managers.models import Manager
 
+import json
 
 def add_hostel(request):
     form = Views_addHostel()
@@ -37,6 +37,9 @@ def add_hostel(request):
 
             instance.room_details = hidden_data
             instance.additional_details = request.POST.get('hidden_info_data', '')
+            manager = Manager.objects.get(user=request.user)
+
+            instance.manager = manager
 
             room_images = request.FILES.getlist('room_image')
             print("Room images:", room_images)
@@ -64,14 +67,13 @@ def add_hostel(request):
 
     return render(request, 'hq/add_hostel.html', {'form': form})
 
-
 def read_hostel(request): 
     hostels = Hostel.objects.all().order_by("-ratings")
     
     stars_list = [one_star, two_star, three_star, four_star, five_star]  
 
     for obj in hostels: 
-        total_star = 0 
+        total_star = 0
         count2 = 0
     # Calculate the total star rating and count
         for i in range(len(stars_list)):
@@ -160,7 +162,6 @@ from consumers.models import Consumer
 @csrf_exempt  # CSRF exemption, if you handle it in another way
 def confirm_payment(request):
     if request.method == 'POST':
-            # Get the JSON data from the request body
         data = json.loads(request.body)
         confirm = data.get('confirm')
         hostel_id = data.get('hostel_id')
@@ -176,7 +177,6 @@ def confirm_payment(request):
 
         # Make sure we received the necessary data
         if confirm and hostel_id:
-            # Store the hostel_id in the session to indicate the payment confirmation
             request.session['payment_confirmed'] = hostel_id
             print('Payment has been confirmed, hostel ID stored in session.')
         else:

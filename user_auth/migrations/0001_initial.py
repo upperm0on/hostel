@@ -10,17 +10,15 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('hq', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Consumer',
+            name='Account_status',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('room_id', models.IntegerField(blank=True, null=True)),
-                ('hostel', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='hq.hostel')),
+                ('user_status', models.CharField(blank=True, choices=[('consumer', 'consumer'), ('manager', 'manager')], default='consumer', max_length=255, null=True)),
                 ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),

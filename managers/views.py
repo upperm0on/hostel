@@ -1,17 +1,23 @@
-from django.shortcuts import render
-from .create_manager_forms import Views_create_manager
+from django.shortcuts import render, redirect
 from .models import Manager
+from user_auth.models import Account_status
 
 # Create your views here.
 def create_manager(request):
-    forms = Views_create_manager() 
     if request.method == "POST": 
-        forms = Views_create_manager(request.POST)
-        if forms.is_valid(): 
-            print(forms.cleaned_data)
-    context = {
-        'forms' : forms,
-    }
+        if 'agree_manager' in request.POST: 
+            acc = Account_status()
+            acc.user = request.user
+            acc.user_status = "manager"
+
+            acc.save() 
+
+            if acc.user_status == "manager": 
+                man = Manager.objects.create(user=acc.user)
+                man.save()
+
+                return redirect('dashboard')        
+    context = {}
     return render(request, 'manager/create_manager.html', context)
 
 def read_manager(request):
@@ -20,18 +26,6 @@ def read_manager(request):
         'obj': managers,
     }
     return render(request, 'manager/read_manager.html', context)
-
-def update_manager(request, id):
-    instance = Manager.objects.get(id=id)
-    forms = Views_create_manager(instance=instance) 
-    if request.method == "POST": 
-        forms = Views_create_manager(request.POST)
-        if forms.is_valid(): 
-            print(forms.cleaned_data)
-    context = {
-        'forms' : forms,
-    }
-    return render(request, 'manager/update_manager.html', context)
 
 def delete_manager(request):
     context = {}

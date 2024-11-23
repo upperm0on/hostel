@@ -244,7 +244,7 @@ main {
     justify-content: space-between;
 }
 
-.card {
+.main-content .card {
     border: none;
     border-radius: 10px;
     background-color: var(--white);
@@ -258,14 +258,14 @@ main {
     /* Limit width for consistency */
 }
 
-.card img {
+.main-content .card img {
     width: 100%;
     height: 200px;
     object-fit: cover;
     border-radius: 10px;
 }
 
-.card-body {
+.main-content .card-body {
     padding: 15px 0;
 }
 

@@ -3,6 +3,12 @@ from .view_forms import View_user_login, View_user_signup
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
 
+from .models import Account_status
+
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+
 # Create your views here.
 def user_signup(request):
     template = 'user_login/login.html'
@@ -28,6 +34,11 @@ def user_signup(request):
         'msg': message,
     }
     return render(request, template, context)
+
+@receiver(post_save, sender=User)
+def create_account_status(sender, instance, created, **kwargs):
+    if created:  # Only run when a new user is created
+        Account_status.objects.create(user=instance)
 
 def user_login(request):
     template = 'user_login/login.html'

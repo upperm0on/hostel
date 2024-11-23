@@ -3,9 +3,15 @@
 <link rel="stylesheet" href="{% static 'css/hq/detail_hostel.css' %}" />
 <div class="hostel">
   <div class="section_one">
+    {% if hostel.image %}
     <div class="img">
       <img src="{{ hostel.image.url }}" alt="hostel image here" />
     </div>
+    {% else %}
+    <div class='img'>
+      <img src="https://images.unsplash.com/photo-1530631673369-bc20fdb32288?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt=' hoste image here' />
+    </div>
+    {% endif %}
     <div class="details">
       <ul class="list-inline">
         <li class="list-inline-item name"><span>{{ hostel.name }}</span></li>

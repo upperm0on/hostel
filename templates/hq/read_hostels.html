@@ -1,9 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
 {% block active_hostel %} activated {% endblock active_hostel %} 
-{% block nav_btn_addition %}
-    <button type="button"><a href="{% url 'add_hostel' %}">Add Hostel </a></button>
-{% endblock nav_btn_addition %}
 {% block content %}
     <link rel="stylesheet" href="{% static 'css/hq/read_hostels.css' %}">
     {% include "./hostel_template.html" %}
