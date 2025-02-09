@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.conf import settings
-import os
+import os, requests
 
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
@@ -155,12 +155,20 @@ def detail_hostel(request, id):
     context = {
         'hostel': hostel,
         'room_images': room_image_urls,
+        'paystack_public_key': settings.PAYSTACK_PUBLIC_KEY,
     }
     return render(request, template_name, context)
 
 from consumers.models import Consumer
 @csrf_exempt  # CSRF exemption, if you handle it in another way
 def confirm_payment(request):
+    url = f"https://api.paystack.co/transaction/verify/"
+    headers = {
+        "Authorization": f"Bearer {settings.PAYSTACK_SECRET_KEY}",
+    }
+    response = requests.get(url, headers=headers)
+    data = response.json()
+    
     if request.method == 'POST':
         data = json.loads(request.body)
         confirm = data.get('confirm')
@@ -184,5 +192,13 @@ def confirm_payment(request):
 
         if request.session.get('payment_confirmed'):
             return redirect('/dashboard/')
+        
+        if data["status"] and data["data"]["status"] == "success":
+            # Payment was successful, save to database
+            print('payments_success')
+            return JsonResponse({"success": True, "message": "Payment verified successfully."})
+        else:
+            print('payments_failed')
+            return JsonResponse({"success": False, "message": "Payment verification failed."})
 
     return redirect('/dashboard/')

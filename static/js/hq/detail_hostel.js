@@ -91,7 +91,29 @@ document.addEventListener("DOMContentLoaded", () => {
     confirmButton.textContent = "Confirm Purchase";
 
     // Event listener for the confirm button
+
+    function payWithPaystack() {
+      const paystack = new PaystackPop();
+      paystack.newTransaction({
+          key: document.querySelector('.paystack_secret_key').value, // Replace with your Paystack Public Key
+          email: 'customer@example.com', // Replace with the customer's email
+          amount: 100, // Amount in kobo (e.g., 5000 = 50 NGN or 50 GHS)
+          currency: 'GHS', // Use 'NGN' for Naira, 'GHS' for Ghanaian Cedi
+          reference: 'ref_' + Math.floor((Math.random() * 1000000000) + 1), // Unique reference
+          label: "Hostel Booking Payment",
+          onSuccess: function(transaction) {
+              // Send transaction.reference to server for verification
+              window.location.href = "/dashboard/";
+              alert('payment succesful')
+          },
+          onCancel: function() {
+              alert("Payment cancelled!");
+          }
+      });
+  }
+  
     confirmButton.addEventListener("click", () => {
+      payWithPaystack()
       const hostelId = room.dataset.hostelName; // Retrieve hostel_id from data attribute
       const room_id = room.dataset.roomInfo
 
@@ -114,7 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       })
       .catch(error => console.error("Error:", error));
-      window.location.href = '/dashboard/'
+      // window.location.href = '/dashboard/'
     });
 
     // Append elements to contentSection and dialogue

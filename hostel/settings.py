@@ -17,6 +17,8 @@ DEBUG = True
 ALLOWED_HOSTS = [
     '*',
     '192.168.0.183',
+    '172.20.10.3',
+    '.ngrok-free.app',
 ]
 
 
@@ -128,3 +130,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+PAYSTACK_PUBLIC_KEY = "pk_live_758418f461d5233f96e279edfc8decabd39b101f"
+PAYSTACK_SECRET_KEY = "sk_live_5b15f4cee1f8aa5031c01c3d90d25b4720c21bfd"
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.ngrok-free.app",
+]

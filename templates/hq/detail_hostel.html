@@ -1,6 +1,7 @@
 {% extends "base.html" %} {% load static %} {% block active_hostel %} activated
 {% endblock active_hostel %} {% block content %}
 <link rel="stylesheet" href="{% static 'css/hq/detail_hostel.css' %}" />
+<input type='hidden' class='paystack_secret_key' value="{{ paystack_public_key }}" >
 <div class="hostel">
   <div class="section_one">
     {% if hostel.image %}
@@ -83,5 +84,6 @@
     </div>
   </div>
 </div>
+<script src="https://js.paystack.co/v2/inline.js"></script>
 <script src="{% static 'js/hq/detail_hostel.js' %}"></script>
 {% endblock content %}
