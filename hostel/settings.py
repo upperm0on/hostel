@@ -131,8 +131,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-PAYSTACK_PUBLIC_KEY = "pk_live_758418f461d5233f96e279edfc8decabd39b101f"
-PAYSTACK_SECRET_KEY = "sk_live_5b15f4cee1f8aa5031c01c3d90d25b4720c21bfd"
+PAYSTACK_PUBLIC_KEY = "pk_test_edb5f4f28031c270ab3c34258aa859b3f7e70495"
+PAYSTACK_SECRET_KEY = "sk_test_dd824ddf3dcfdca8ba6293dfed882079ae1cc2bb"
 
 CSRF_TRUSTED_ORIGINS = [
     "https://*.ngrok-free.app",
