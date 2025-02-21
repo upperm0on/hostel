@@ -1,172 +1,217 @@
-{% extends "base.html" %}
-{% load static %}
-{% block content %}
-    <link rel='stylesheet' href='{% static "css/dashboard.css" %}'>
-    <link rel='stylesheet' href='{% static "css/config.css" %}'>
-    {% if not consumer %}
-        {% if is_manager %}
-        <div class="container my-5">
-            <div class="row">
-                <!-- Main Content -->
-                <div class="col-md-12">
-                    <h1 class="mb-4">Welcome, {{ request.user.username|capfirst }}</h1>
-        
-                    <!-- Quick Actions -->
-                     {% if not hostel %}
-                     <div class="d-flex justify-content-between mb-4">
-                         <a class="btn btn-primary m-4" href='{% url "add_hostel" %}'>Add New Property</a>
-                         <button class="btn btn-outline-secondary">View All Bookings</button>
-                        </div>
-                    {% else %}
-                    <h1>{{ hostel.name }} </h1>    
-                    {% endif %}
-                    <!-- Statistics Cards -->
-                    <div class="row g-3">
-                        <div class="col-md-4">
-                            <div class="card shadow-sm">
-                                <div class="card-body text-center">
-                                    <h5 class="card-title">Total Bookings</h5>
-                                    <p class="card-text fs-3">120</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card shadow-sm">
-                                <div class="card-body text-center">
-                                    <h5 class="card-title">Active Listings</h5>
-                                    <p class="card-text fs-3">5</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card shadow-sm">
-                                <div class="card-body text-center">
-                                    <h5 class="card-title">Total Earnings</h5>
-                                    <p class="card-text fs-3">GHc {{ total_revenue }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-        
-                    <!-- Recent Activity -->
-                    <div class="mt-5">
-                        <h3>Recent Bookings</h3>
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Guest</th>
-                                    <th>Property</th>
-                                    <th>Date</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>John Doe</td>
-                                    <td>Cozy Apartment</td>
-                                    <td>2024-11-15</td>
-                                    <td><span class="badge bg-success">Completed</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Jane Smith</td>
-                                    <td>Modern Condo</td>
-                                    <td>2024-11-17</td>
-                                    <td><span class="badge bg-warning">Pending</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Mark Lee</td>
-                                    <td>Beachside Villa</td>
-                                    <td>2024-11-20</td>
-                                    <td><span class="badge bg-danger">Cancelled</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+{% extends "base.html" %} {% load static %} {% block content %}
+<link rel="stylesheet" href='{% static "css/dashboard.css" %}' />
+<link rel="stylesheet" href='{% static "css/config.css" %}' />
+{% if not consumer %} {% if is_manager %}
+<div class="container my-5">
+  <div class="row">
+    <!-- Main Content -->
+    <div class="col-md-12">
+      <h1 class="mb-4">Welcome, {{ request.user.username|capfirst }}</h1>
+
+      <!-- Quick Actions -->
+      {% if not hostel %}
+      <div class="d-flex justify-content-between mb-4">
+        <a class="btn btn-primary m-4" href='{% url "add_hostel" %}'
+          >Add New Property</a
+        >
+        <button class="btn btn-outline-secondary">View All Bookings</button>
+      </div>
+      {% else %}
+      <h1>{{ hostel.name }}</h1>
+      {% endif %}
+      <!-- Statistics Cards -->
+      <div class="row g-3">
+        <div class="col-md-4">
+          <div class="card shadow-sm">
+            <div class="card-body text-center">
+              <h5 class="card-title">Total Bookings</h5>
+              <a
+                href='{% url "active_listings" %}'
+                class="card-text fs-3 nav-link"
+                >{{ hostel_consumers_number }}
+              </a>
             </div>
+          </div>
         </div>
-        
-        {% else %}
-        <section id='section1' class='mb-3'>
-            <a href='{% url "create_manager" %}' class='btn btn-outline-primary' style='position: absolute; right: 200px; transform: translate(-50%, -50%); font-family: var(--font2); font-size: 1.25rem; font-weight: 500;'>Upgrade to Manager</a>
-        <div class="section_msg">
-            <p id='first'>You are currently not in any Hostel</p>
-            <p id='second'>Find one that suits your needs <a href='{% url "read_hostels" %}' class='nav-linked'> Here </a></p>
+        <div class="col-md-4">
+          <div class="card shadow-sm">
+            <div class="card-body text-center">
+              <h5 class="card-title">Active Listings</h5>
+              <p class="card-text fs-3">5</p>
+            </div>
+          </div>
         </div>
-        <div class='section_img'>
-            <img src='{% static "images/potential.png" %}' alt='This is the section img'>
+        <div class="col-md-4">
+          <div class="card shadow-sm">
+            <div class="card-body text-center">
+              <h5 class="card-title">Total Earnings</h5>
+              <p class="card-text fs-3">GHc {{ total_revenue }}</p>
+            </div>
+          </div>
         </div>
-    </section>
-    <section id='recommended_hostels'>
-        <p>recommended hostels </p>
-        {% include "./hq/hostel_template.html" %}
-    </section>
-        {% endif %}
-    {% else %}
-    <div class="container">
-        <div class="profile-header">
-            <h2 class="playfair-display">Booking Details</h2>
-            <p class="info-text open-sans">Find your booking and accommodation details below.</p>
-        </div>
-      
-        <div class="main-content">
-            <div class="card">
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="mt-5">
+        <h3>Recent Bookings</h3>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Guest</th>
+              <th>Property</th>
+              <th>Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>John Doe</td>
+              <td>Cozy Apartment</td>
+              <td>2024-11-15</td>
+              <td><span class="badge bg-success">Completed</span></td>
+            </tr>
+            <tr>
+              <td>Jane Smith</td>
+              <td>Modern Condo</td>
+              <td>2024-11-17</td>
+              <td><span class="badge bg-warning">Pending</span></td>
+            </tr>
+            <tr>
+              <td>Mark Lee</td>
+              <td>Beachside Villa</td>
+              <td>2024-11-20</td>
+              <td><span class="badge bg-danger">Cancelled</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% else %}
+<section id="section1" class="mb-3">
+  <a
+    href='{% url "create_manager" %}'
+    class="btn btn-outline-primary"
+    style="
+      position: absolute;
+      right: 200px;
+      transform: translate(-50%, -50%);
+      font-family: var(--font2);
+      font-size: 1.25rem;
+      font-weight: 500;
+    "
+    >Upgrade to Manager</a
+  >
+  <div class="section_msg">
+    <p id="first">You are currently not in any Hostel</p>
+    <p id="second">
+      Find one that suits your needs
+      <a href='{% url "read_hostels" %}' class="nav-linked"> Here </a>
+    </p>
+  </div>
+  <div class="section_img">
+    <img
+      src='{% static "images/potential.png" %}'
+      alt="This is the section img"
+    />
+  </div>
+</section>
+<section id="recommended_hostels">
+  <p>recommended hostels</p>
+  {% include "./hq/hostel_template.html" %}
+</section>
+{% endif %} {% else %}
+<div class="container">
+  <div class="profile-header">
+    <h2 class="playfair-display">Booking Details</h2>
+    <p class="info-text open-sans">
+      Find your booking and accommodation details below.
+    </p>
+  </div>
+
+  <div class="main-content">
+    <div class="card">
+      <div class="card-body">
+        <h3 class="section-title lobster-two-regular">Your Manager</h3>
+        <p class="info-text">
+          <strong>Name:</strong> {{ consumer.hostel.manager }}
+        </p>
+        <p class="info-text">
+          <strong>Email:</strong> {{ consumer.hostel.manager.user.email }}
+        </p>
+        <a
+          href="mailto:{{ consumer.hostel.manager.email }}"
+          class="btn btn-primary"
+          >Contact Host</a
+        >
+      </div>
+    </div>
+
+    <div class="card">
+      <img
+        src="{{ consumer.hostel.image.url }}"
+        alt="Hostel Image"
+        class="img-fluid"
+      />
+      <div class="card-body">
+        <h3 class="section-title lobster-two-regular">
+          {{ consumer.hostel.name }}
+        </h3>
+        <p class="info-text">
+          <strong>Location:</strong> {{ consumer.hostel.location }}
+        </p>
+        <p class="info-text">
+          <strong>Check-In:</strong> {{ consumer.check_in }}
+        </p>
+        <p class="info-text">
+          <strong>Check-Out:</strong> {{ consumer.check_out }}
+        </p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body" id="roomDetailsContainer"></div>
+    </div>
+  </div>
+
+  <div class="ratings_n_reviews">
+    <div class="add_review">
+  </div>
+  {% endif %}
+
+  <script>
+    const roomDetailsContainer = document.querySelector('#roomDetailsContainer');
+
+    // Get room data (this is your room details JSON)
+    const room = {{ consumer.hostel.room_details|safe }};
+
+    // Loop through each room data and display it
+    room.forEach(r => {
+        console.log(r.number_in_room);  // Log the number_in_room for each room
+
+        // Check if the room matches the consumer's room_id
+        if (r.number_in_room == {{ consumer.room_id }}) {
+            const roomCard = document.createElement('div');
+            roomCard.classList.add('mb-3');
+            roomCard.innerHTML = `
                 <div class="card-body">
-                    <h3 class="section-title lobster-two-regular">Your Manager</h3>
-                    <p class="info-text"><strong>Name:</strong> {{ consumer.hostel.manager }}</p>
-                    <p class="info-text"><strong>Email:</strong> {{ consumer.hostel.manager.user.email }}</p>
-                    <a href="mailto:{{ consumer.hostel.manager.email }}" class="btn btn-primary">Contact Host</a>
-                </div>
-            </div>
-
-            <div class="card">
-                <img src="{{ consumer.hostel.image.url }}" alt="Hostel Image" class="img-fluid">
-                <div class="card-body">
-                    <h3 class="section-title lobster-two-regular">{{ consumer.hostel.name }}</h3>
-                    <p class="info-text"><strong>Location:</strong> {{ consumer.hostel.location }}</p>
-                    <p class="info-text"><strong>Check-In:</strong> {{ consumer.check_in }}</p>
-                    <p class="info-text"><strong>Check-Out:</strong> {{ consumer.check_out }}</p>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-body" id="roomDetailsContainer">
-                </div>
-            </div>
-
-        </div>
-    {% endif %}
-    
-    <script>
-        const roomDetailsContainer = document.querySelector('#roomDetailsContainer');
-
-        // Get room data (this is your room details JSON)
-        const room = {{ consumer.hostel.room_details|safe }};
-        
-        // Loop through each room data and display it
-        room.forEach(r => {
-            console.log(r.number_in_room);  // Log the number_in_room for each room
-            
-            // Check if the room matches the consumer's room_id
-            if (r.number_in_room == {{ consumer.room_id }}) {
-                const roomCard = document.createElement('div');
-                roomCard.classList.add('mb-3');
-                roomCard.innerHTML = `
-                    <div class="card-body">
-                        <div class="room-images">
-                            <img src="/media/room_images/{{ consumer.hostel.name }}/{{ consumer.room_id }}/${r.room_image[0]}" alt="Room Image" class="img-fluid" />
-                        </div>
-                        <h4 class="section-title lobster-two-regular m-3">Room Type: ${r.number_in_room} in a room</h4>
-                        <p class="info-text"><strong>Price per Year:</strong> $${r.price}</p>
-                        <h5>Amenities:</h5>
-                        <ul class="list-unstyled">
-                            ${JSON.parse(r.amenities).map(amenity => `<li>${amenity}</li>`).join('')}
-                        </ul>
+                    <div class="room-images">
+                        <img src="/media/room_images/{{ consumer.hostel.name }}/{{ consumer.room_id }}/${r.room_image[0]}" alt="Room Image" class="img-fluid" />
                     </div>
-                `;
-                roomDetailsContainer.appendChild(roomCard);
-            }
-        });
-    </script>
+                    <h4 class="section-title lobster-two-regular m-3">Room Type: ${r.number_in_room} in a room</h4>
+                    <p class="info-text"><strong>Price per Year:</strong> $${r.price}</p>
+                    <h5>Amenities:</h5>
+                    <ul class="list-unstyled">
+                        ${JSON.parse(r.amenities).map(amenity => `<li>${amenity}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+            roomDetailsContainer.appendChild(roomCard);
+        }
+    });
+  </script>
 
-{% endblock content %}
+  {% endblock content %}
+</div>

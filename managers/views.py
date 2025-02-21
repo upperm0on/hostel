@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Manager
+from consumers.models import Consumer
 from user_auth.models import Account_status
 
 # Create your views here.
@@ -30,3 +31,11 @@ def read_manager(request):
 def delete_manager(request):
     context = {}
     return render(request, 'manager/delete_manager.html', context)
+
+def active_listings(request):
+    manager = Manager.objects.get(user=request.user)
+    consumers = Consumer.objects.filter(hostel__manager=manager).all()
+    context = {
+        'consumers_list': consumers,
+    }
+    return render(request, 'manager/active_listings.html', context)

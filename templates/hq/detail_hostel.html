@@ -49,7 +49,7 @@
             element.classList.add("list-inline-item");
             element.innerHTML =
               `${data["number_in_room"]} in a Room at <strong>${data["price"]}</strong> GHC` +
-              ` <button type="button" class="btn btn-outline-secondary room_info_btn" data-room-info='${data["number_in_room"]}' data-price="${data['price']}" data-hostel-name='{{ hostel.name }}' data-room-image='${data["room_image"]}' data-amenities='${data['amenities']}'> Apply </button>`;
+              ` <button type="button" class="btn btn-outline-secondary room_info_btn" data-room-info='${data["number_in_room"]}' data-price="${data['price']}" data-hostel-id='{{ hostel.id }}' data-hostel-name='{{ hostel.name }}' data-room-image='${data["room_image"]}' data-amenities='${data['amenities']}'> Apply </button>`;
             append_here.appendChild(element);
           });
         </script>
@@ -84,6 +84,12 @@
     </div>
   </div>
 </div>
+{% if request.user.is_authenticated %}
+<div class="ratings_n_reviews">
+  <div class="read_reviews"></div>
+  <div class="add_review"></div>
+</div>
+{% endif %}
 <script src="https://js.paystack.co/v2/inline.js"></script>
 <script src="{% static 'js/hq/detail_hostel.js' %}"></script>
 {% endblock content %}

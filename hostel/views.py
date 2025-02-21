@@ -5,6 +5,8 @@ from user_auth.models import Account_status
 from consumers.models import Consumer
 from managers.models import Manager
 
+from payments.models import Payment
+
 import json
 @login_required(login_url='/authenticate/login')
 def dashboard(request):
@@ -27,15 +29,19 @@ def dashboard(request):
                 hostel_users = Consumer.objects.filter(hostel=hostel)
 
                 # Prepare room prices from hostel details
-                room_prices = {str(room_data['number_in_room']): int(room_data['price']) for room_data in json.loads(hostel.room_details)}
+                # room_prices = {str(room_data['number_in_room']): int(room_data['price']) for room_data in json.loads(hostel.room_details)}
+
+                payments = Payment.objects.filter(consumer__hostel__manager=manager)
 
                 total_revenue = 0
-                for user in hostel_users:
-                    price = room_prices.get(str(user.room_id))  # Convert user.room_id to a string
-                    if price is not None:
-                        total_revenue += price
-                    else:
-                        print(f"Warning: Room ID {user.room_id} not found in room_prices")
+                for payment in payments: 
+                    total_revenue += payment.amount
+
+                context['total_revenue'] = total_revenue
+                manager = Manager.objects.get(user=request.user)
+                consumers = Consumer.objects.filter(hostel__manager=manager).count()
+
+                context['hostel_consumers_number'] = consumers
             else: 
                 context['err'] = "You do not have any hostel"
     except Manager.DoesNotExist:

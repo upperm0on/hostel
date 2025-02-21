@@ -3,6 +3,10 @@ from django.http import JsonResponse
 from django.conf import settings
 import os, requests
 
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 
@@ -160,45 +164,75 @@ def detail_hostel(request, id):
     return render(request, template_name, context)
 
 from consumers.models import Consumer
-@csrf_exempt  # CSRF exemption, if you handle it in another way
+from payments.models import Payment
+
 def confirm_payment(request):
-    url = f"https://api.paystack.co/transaction/verify/"
-    headers = {
-        "Authorization": f"Bearer {settings.PAYSTACK_SECRET_KEY}",
-    }
-    response = requests.get(url, headers=headers)
-    data = response.json()
-    
     if request.method == 'POST':
-        data = json.loads(request.body)
-        confirm = data.get('confirm')
-        hostel_id = data.get('hostel_id')
-        room_id = data.get('room_id')
+        try:
+            request_data = json.loads(request.body)  # ✅ Store request body separately
+            print("✅ Received Data in Backend:", request_data)
 
-        consumer = Consumer() 
+            paystack_reference = request_data.get('reference')
+            hostel_id = request_data.get('hostel_id')
+            room_id = request_data.get('room_id')
+            amount_paid = float(request_data.get('amount', 0.00))
 
-        hostel = Hostel.objects.get(name=hostel_id)
-        consumer.user = request.user 
-        consumer.hostel = hostel 
-        consumer.room_id = room_id
-        consumer.save()
+            if not paystack_reference:
+                print("❌ Reference is missing!")
+                return JsonResponse({"success": False, "message": "No transaction reference provided."}, status=400)
 
-        # Make sure we received the necessary data
-        if confirm and hostel_id:
-            request.session['payment_confirmed'] = hostel_id
-            print('Payment has been confirmed, hostel ID stored in session.')
-        else:
-            print('error')
+            print(f"✅ Verifying transaction with Paystack for reference: {paystack_reference}")
+            url = f"https://api.paystack.co/transaction/verify/{paystack_reference}"
+            headers = {"Authorization": f"Bearer {settings.PAYSTACK_SECRET_KEY}"}
+            response = requests.get(url, headers=headers)
+            paystack_data = response.json()  # ✅ Store Paystack response separately
 
-        if request.session.get('payment_confirmed'):
-            return redirect('/dashboard/')
-        
-        if data["status"] and data["data"]["status"] == "success":
-            # Payment was successful, save to database
-            print('payments_success')
-            return JsonResponse({"success": True, "message": "Payment verified successfully."})
-        else:
-            print('payments_failed')
-            return JsonResponse({"success": False, "message": "Payment verification failed."})
+            print("✅ Paystack Response:", paystack_data)
+
+            if not paystack_data.get("status") or paystack_data.get("data") is None:
+                print("❌ Invalid response from Paystack")
+                return JsonResponse({"success": False, "message": "Invalid response from Paystack."}, status=400)
+
+            if paystack_data["data"].get("status") != "success":
+                print("❌ Payment verification failed.")
+                return JsonResponse({"success": False, "message": "Payment verification failed."}, status=400)
+
+            amount_verified = float(paystack_data["data"].get("amount", 0)) / 100  # Convert from kobo
+            if amount_verified != amount_paid:
+                print("❌ Mismatched amount: Expected", amount_paid, "but got", amount_verified)
+                return JsonResponse({"success": False, "message": "Payment amount mismatch."}, status=400)
+
+            print(f"✅ Payment verified successfully for reference: {paystack_reference}")
+
+            consumer = Consumer()
+            consumer.user = request.user
+            consumer.room_id = room_id
+            consumer.hostel = Hostel.objects.get(id=hostel_id)
+            consumer.amount = request_data.get('amount')
+            consumer.save()
+
+
+
+            return JsonResponse({
+                "success": True,
+                "message": "Payment verified successfully.",
+                "transaction_id": paystack_reference,
+                "amount_paid": amount_paid
+            }, status=200)
+
+        except Exception as e:
+            print("❌ Backend Error:", str(e))
+            return JsonResponse({"success": False, "message": str(e)}, status=500)
 
     return redirect('/dashboard/')
+
+@receiver(post_save, sender=Consumer)
+def create_transaction_for_consumer(sender, instance, created, **kwargs):
+    room_details = json.loads(instance.hostel.room_details)
+    room = next((room for room in room_details if str(room.get("number_in_room")) == str(instance.room_id)), {}),
+    if created:
+        Payment.objects.create(
+            consumer=instance,
+            amount = instance.amount,
+        )
+        print(f"✅ Transaction created for consumer {instance.id}")

@@ -2,10 +2,11 @@
 
 main {
   display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
 }
 
 .hostel {
-  margin: 0 auto;
   padding: 30px;
   border-radius: 15px;
   box-shadow: 0px 0px 15px -3px var(--white2);
@@ -102,5 +103,24 @@ main {
 
 .display_room_details img {
   height: 100%;
+  width: 100%;
+}
+
+.ratings_n_reviews {
+  width: 25vw;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+}
+
+.ratings_n_reviews .read_reviews{
+  height: 70%;
+  border: 2px solid blue;
+  width: 100%;
+}
+
+.ratings_n_reviews .add_review {
+  height: 30%;
+  border: 2px solid green;
   width: 100%;
 }

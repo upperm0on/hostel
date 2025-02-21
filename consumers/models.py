@@ -7,3 +7,4 @@ class Consumer(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     room_id = models.IntegerField(blank=True, null=True)
     hostel = models.ForeignKey(Hostel, on_delete=models.CASCADE, null=True, blank=True) 
+    amount = models.DecimalField(max_digits=255, decimal_places=2, blank=True, null=True)

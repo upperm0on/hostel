@@ -18,6 +18,7 @@ ALLOWED_HOSTS = [
     '*',
     '192.168.0.183',
     '172.20.10.3',
+    '172.20.10.10',
     '.ngrok-free.app',
 ]
 
@@ -38,6 +39,7 @@ INSTALLED_APPS = [
     'user_auth',
     'category',
     'ratings',
+    'payments',
 ]
 
 MIDDLEWARE = [

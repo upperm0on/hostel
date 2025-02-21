@@ -308,6 +308,13 @@ main {
     margin-top: 15px;
 }
 
+.ratings_n_reviews {
+    margin: 50px auto;
+    width: 50%;
+    height: 300px;
+    border: 3px solid black;
+}
+
 /* Responsive Design */
 @media (max-width: 992px) {
     .main-content {

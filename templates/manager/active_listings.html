@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <ul>
+        {% for consumer in consumers_list %}
+            <li>{{ consumer.user.username }} </li>
+        {% endfor %}
+    </ul>
+{% endblock content %}
