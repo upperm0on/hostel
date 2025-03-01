@@ -1,0 +1,55 @@
+<div class="profile-header">
+    <h2 class="playfair-display">Booking Details</h2>
+    <p class="info-text open-sans">
+      Find your booking and accommodation details below.
+    </p>
+  </div>
+
+  <div class="main-content">
+    <div class="card">
+      <div class="card-body">
+        <h3 class="section-title lobster-two-regular">Your Manager</h3>
+        <p class="info-text">
+          <strong>Name:</strong> {{ consumer.hostel.manager }}
+        </p>
+        <p class="info-text">
+          <strong>Email:</strong> {{ consumer.hostel.manager.user.email }}
+        </p>
+        <a
+          href="mailto:{{ consumer.hostel.manager.email }}"
+          class="btn btn-primary"
+          >Contact Host</a
+        >
+      </div>
+    </div>
+
+    <div class="card">
+      <img
+        src="{{ consumer.hostel.image.url }}"
+        alt="Hostel Image"
+        class="img-fluid"
+      />
+      <div class="card-body">
+        <h3 class="section-title lobster-two-regular">
+          {{ consumer.hostel.name }}
+        </h3>
+        <p class="info-text">
+          <strong>Location:</strong> {{ consumer.hostel.location }}
+        </p>
+        <p class="info-text">
+          <strong>Check-In:</strong> {{ consumer.check_in }}
+        </p>
+        <p class="info-text">
+          <strong>Check-Out:</strong> {{ consumer.check_out }}
+        </p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body" id="roomDetailsContainer"></div>
+    </div>
+  </div>
+
+  <div class="ratings_n_reviews">
+    <div class="add_review">
+  </div>

@@ -1,0 +1,32 @@
+<section id="section1" class="mb-3">
+    <a
+      href='{% url "create_manager" %}'
+      class="btn btn-outline-primary"
+      style="
+        position: absolute;
+        right: 200px;
+        transform: translate(-50%, -50%);
+        font-family: var(--font2);
+        font-size: 1.25rem;
+        font-weight: 500;
+      "
+      >Upgrade to Manager</a
+    >
+    <div class="section_msg">
+      <p id="first">You are currently not in any Hostel</p>
+      <p id="second">
+        Find one that suits your needs
+        <a href='{% url "read_hostels" %}' class="nav-linked"> Here </a>
+      </p>
+    </div>
+    <div class="section_img">
+      <img
+        src='{% static "images/potential.png" %}'
+        alt="This is the section img"
+      />
+    </div>
+  </section>
+  <section id="recommended_hostels">
+    <p>recommended hostels</p>
+    {% include "./hq/hostel_template.html" %}
+  </section>

@@ -166,6 +166,7 @@ def detail_hostel(request, id):
 from consumers.models import Consumer
 from payments.models import Payment
 
+@csrf_exempt
 def confirm_payment(request):
     if request.method == 'POST':
         try:

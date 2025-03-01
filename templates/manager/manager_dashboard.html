@@ -1,0 +1,114 @@
+<div class="container my-5">
+    <div class="row">
+      <!-- Main Content -->
+      <div class="col-md-12">
+        <h1 class="mb-4">Welcome, {{ request.user.username|capfirst }}</h1>
+  
+        <!-- Quick Actions -->
+        {% if not hostel %}
+        <div class="d-flex justify-content-between mb-4">
+          <a class="btn btn-primary m-4" href='{% url "add_hostel" %}'
+            >Add New Property</a
+          >
+          <button class="btn btn-outline-secondary">View All Bookings</button>
+        </div>
+        {% else %}
+        <h1>{{ hostel.name }}</h1>
+        {% endif %}
+        <!-- Statistics Cards -->
+        <div class="row g-3">
+          <div class="col-md-4">
+            <div class="card shadow-sm">
+              <div class="card-body text-center">
+                <h5 class="card-title">Total Bookings</h5>
+                <a
+                  href='{% url "active_listings" %}'
+                  class="card-text fs-3 nav-link"
+                  >{{ hostel_consumers_number }}
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card shadow-sm">
+              <div class="card-body text-center">
+                <h5 class="card-title">Active Listings</h5>
+                <p class="card-text fs-3">5</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card shadow-sm">
+              <div class="card-body text-center">
+                <h5 class="card-title">Total Earnings</h5>
+                <p class="card-text fs-3">GHc {{ total_revenue }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        {% comment %} Room Availability status {% endcomment %}
+        <div class='room_availability'>
+          Rooms: 
+          <div class='room_availability_status'>
+          </div>
+          <script>
+            let filteredConsumers = JSON.parse('{{ filtered_consumers_dict|safe }}');
+                        
+            const room = {{ hostel.room_details|safe }};
+            room_availability_status = document.querySelector('.room_availability_status');
+            room.forEach(r => 
+            room_availability_status.innerHTML += `
+            <div class='room_status'>
+              <strong>${r.number_in_room} in a room</strong>
+              <ul>
+                <li>Price per Year : $${r.price}</li>
+                <li>Number of rooms : ${r.number_of_rooms}</li>
+                <li>Total Occupancy : ${r.number_in_room * r.number_of_rooms}</li>
+                <li>Current Occupants: ${filteredConsumers[r.number_in_room]} </li>
+                <li>Room Status: ${filteredConsumers[r.number_in_room] < (r.number_of_rooms * r.number_in_room) ? 'Available' : 'Not Available'}</li>
+              </ul>
+            </div>`
+            )
+          </script>
+          </div>
+        
+        
+        <!-- Recent Activity -->
+        <div class="mt-5">
+          <h3>Recent Bookings</h3>
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Guest</th>
+                <th>Property</th>
+                <th>Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>John Doe</td>
+                <td>Cozy Apartment</td>
+                <td>2024-11-15</td>
+                <td><span class="badge bg-success">Completed</span></td>
+              </tr>
+              <tr>
+                <td>Jane Smith</td>
+                <td>Modern Condo</td>
+                <td>2024-11-17</td>
+                <td><span class="badge bg-warning">Pending</span></td>
+              </tr>
+              <tr>
+                <td>Mark Lee</td>
+                <td>Beachside Villa</td>
+                <td>2024-11-20</td>
+                <td><span class="badge bg-danger">Cancelled</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  

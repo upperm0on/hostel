@@ -39,9 +39,21 @@ def dashboard(request):
 
                 context['total_revenue'] = total_revenue
                 manager = Manager.objects.get(user=request.user)
-                consumers = Consumer.objects.filter(hostel__manager=manager).count()
+                consumers = Consumer.objects.filter(hostel__manager=manager)
 
-                context['hostel_consumers_number'] = consumers
+                context['hostel_consumers_number'] = consumers.count()
+                context['consumers'] = consumers
+
+                room_details = json.loads(Hostel.objects.get(manager=manager).room_details)
+
+                filtered_consumers_dict = dict()
+                for detail in room_details: 
+                    filtered_consumers = consumers.filter(room_id=int(detail['number_in_room'])).count()
+                    filtered_consumers_dict[detail['number_in_room']] = filtered_consumers
+
+                    
+                print(filtered_consumers_dict)
+                context['filtered_consumers_dict'] = json.dumps(filtered_consumers_dict)
             else: 
                 context['err'] = "You do not have any hostel"
     except Manager.DoesNotExist:
