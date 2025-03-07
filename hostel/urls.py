@@ -15,6 +15,7 @@ urlpatterns = [
     path('consumer/', include("consumers.urls")),
     path('authenticate/', include("user_auth.urls")),
     path('category/', include("category.urls")),
+    path('review/', include("reviews.urls")),
 ]
 
 if settings.DEBUG:

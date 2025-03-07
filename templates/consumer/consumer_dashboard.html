@@ -1,3 +1,4 @@
+{% load static %}
 <div class="profile-header">
     <h2 class="playfair-display">Booking Details</h2>
     <p class="info-text open-sans">
@@ -51,5 +52,45 @@
   </div>
 
   <div class="ratings_n_reviews">
-    <div class="add_review">
+    <div class="add_rating">
+      <h3 class="section-title lobster-two-regular">Drop a rating and a review</h3>
+      <form method="post" action="{% url "create_review" %}">
+        {% csrf_token %}
+        <div class="form-group">
+          <div class="star-rating">
+            <input type="radio" id="star5" name="rating" value="5" />
+            <label for="star5" title="5 stars">
+              <i class="fas fa-star"></i>
+            </label>
+            <input type="radio" id="star4" name="rating" value="4" />
+            <label for="star4" title="4 stars">
+              <i class="fas fa-star"></i>
+            </label>
+            <input type="radio" id="star3" name="rating" value="3" />
+            <label for="star3" title="3 stars">
+              <i class="fas fa-star"></i>
+            </label>
+            <input type="radio" id="star2" name="rating" value="2" />
+            <label for="star2" title="2 stars">
+              <i class="fas fa-star"></i>
+            </label>
+            <input type="radio" id="star1" name="rating" value="1" />
+            <label for="star1" title="1 star">
+              <i class="fas fa-star"></i>
+            </label>
+          </div>
+      </div>
+    <div class="add_review mt-4">
+        <div class="form-group">
+          <textarea
+            id="review"
+            name="review"
+            class="form-control"
+            rows="4"
+            required
+          ></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary m-auto">Submit Review</button>
+      </form>
+    </div>
   </div>

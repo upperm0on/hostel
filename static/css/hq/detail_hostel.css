@@ -108,19 +108,82 @@ main {
 
 .ratings_n_reviews {
   width: 25vw;
-  border: 1px solid black;
+  height: 60vh;
   display: flex;
+  overflow-x: scroll;
+  scroll-behavior: smooth;
   flex-direction: column;
 }
 
-.ratings_n_reviews .read_reviews{
-  height: 70%;
-  border: 2px solid blue;
-  width: 100%;
+.ratings_n_reviews .section-title {
+  font-size: 1.5rem;
+  font-family: var(--font2);
+  text-transform: capitalize;
+  color: var(--black2);
+  margin: 10px;
 }
 
-.ratings_n_reviews .add_review {
-  height: 30%;
-  border: 2px solid green;
-  width: 100%;
+.ratings_n_reviews .list-inline {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+}
+.ratings_n_reviews .list-inline .list-inline-item {
+  display: grid;
+  grid-template-columns: 1fr 9fr;
+  margin: 10px 0;
+  padding: 5px;
+  border-bottom: 1px solid var(--gray);
+}
+
+.ratings_n_reviews .list-inline .list-inline-item .name_and_rating {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.ratings_n_reviews .list-inline .list-inline-item .name_and_rating  {
+  display: grid;
+  grid-template-columns: 1fr 9fr;
+}
+
+.ratings_n_reviews .list-inline .list-inline-item .profile-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid black;
+  background-color: var(--gray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--dynamic-text-color);
+  background-color: var(--dynamic-bg-color);
+  margin-right: 10px;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 1.25rem;
+  font-weight: 400;
+  line-height: 30px; /* Ensures the text is vertically centered */
+}
+
+
+.ratings_n_reviews .list-inline .list-inline-item .name_and_rating .user-name {
+  font-size: 1.2rem;
+  font-weight: normal;
+  color: var(--black2);
+  margin-right: 10px;
+}
+
+.ratings_n_reviews .list-inline .list-inline-item .name_and_rating .rating {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--black2);
+}
+
+.ratings_n_reviews .list-inline .list-inline-item .review-text {
+  font-size: 1rem;
+  color: var(--black2);
+  margin-top: 5px;
 }

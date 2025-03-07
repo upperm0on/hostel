@@ -48,7 +48,7 @@ def user_login(request):
     if request.method == "POST":
         forms = View_user_login(request.POST)
         if forms.is_valid():
-            username = forms.cleaned_data['username']
+            username = forms.cleaned_data['name']
             password = forms.cleaned_data['password']
 
             user = authenticate(request, username=username, password=password)

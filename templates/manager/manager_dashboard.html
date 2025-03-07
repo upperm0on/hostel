@@ -1,114 +1,115 @@
+{% load static %}
+
 <div class="container my-5">
-    <div class="row">
-      <!-- Main Content -->
-      <div class="col-md-12">
-        <h1 class="mb-4">Welcome, {{ request.user.username|capfirst }}</h1>
-  
-        <!-- Quick Actions -->
-        {% if not hostel %}
-        <div class="d-flex justify-content-between mb-4">
-          <a class="btn btn-primary m-4" href='{% url "add_hostel" %}'
-            >Add New Property</a
-          >
-          <button class="btn btn-outline-secondary">View All Bookings</button>
-        </div>
-        {% else %}
+  <!-- Navigation Tabs -->
+  <ul class="nav nav-tabs" id="dashboardTabs" role="tablist">
+    <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#overview" role="tab">Dashboard</a></li>
+    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#statistics" role="tab">Statistics</a></li>
+    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#room_availability" role="tab">Room Availability</a></li>
+    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#bookings" role="tab">Recent Bookings</a></li>
+    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#hostel_management" role="tab">Hostel Management</a></li>
+    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#earnings" role="tab">Earnings & Financials</a></li>
+    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#users" role="tab">User Management</a></li>
+    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#reports" role="tab">Reports & Insights</a></li>
+  </ul>
+
+  <div class="tab-content mt-3">
+    <!-- Dashboard Overview -->
+    <div class="tab-pane fade show active" id="overview" role="tabpanel">
+      <h1 class="mb-4">Welcome, {{ request.user.username|capfirst }}</h1>
+      {% if not hostel %}
+        <a href="#" class="btn btn-primary">Add New Property</a>
+        <button class="btn btn-secondary">View All Bookings</button>
+      {% else %}
         <h1>{{ hostel.name }}</h1>
-        {% endif %}
-        <!-- Statistics Cards -->
-        <div class="row g-3">
-          <div class="col-md-4">
-            <div class="card shadow-sm">
-              <div class="card-body text-center">
-                <h5 class="card-title">Total Bookings</h5>
-                <a
-                  href='{% url "active_listings" %}'
-                  class="card-text fs-3 nav-link"
-                  >{{ hostel_consumers_number }}
-                </a>
+      {% endif %}
+    </div>
+
+    <!-- Statistics -->
+    <div class="tab-pane fade" id="statistics" role="tabpanel">
+      <h5>Total Bookings</h5>
+      <a href="#" class="btn btn-info">{{ hostel_consumers_number }}</a>
+      <h5 class="mt-3">Total Earnings</h5>
+      <p class="text-success">GHc {{ total_revenue }}</p>
+    </div>
+
+    <!-- Room Availability -->
+    <div class="tab-pane fade" id="room_availability" role="tabpanel">
+      <div class='room_availability_status'></div>
+      <script>
+        let filteredConsumers = JSON.parse('{{ filtered_consumers_dict|safe }}');
+        const room = {{ hostel.room_details|safe }};
+        room_availability_status = document.querySelector('.room_availability_status');
+        room.forEach(r => {
+          room_availability_status.innerHTML += `
+            <div class='room_status card mb-3'>
+              <div class="card-body">
+                <strong>${r.number_in_room} in a room</strong>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">Price per Year: $${r.price}</li>
+                  <li class="list-group-item">Number of rooms: ${r.number_of_rooms}</li>
+                  <li class="list-group-item">Total Occupancy: ${r.number_in_room * r.number_of_rooms}</li>
+                  <li class="list-group-item">Current Occupants: ${filteredConsumers[r.number_in_room]}</li>
+                  <li class="list-group-item">Room Status: ${filteredConsumers[r.number_in_room] < (r.number_of_rooms * r.number_in_room) ? 'Available' : 'Not Available'}</li>
+                </ul>
               </div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="card shadow-sm">
-              <div class="card-body text-center">
-                <h5 class="card-title">Active Listings</h5>
-                <p class="card-text fs-3">5</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="card shadow-sm">
-              <div class="card-body text-center">
-                <h5 class="card-title">Total Earnings</h5>
-                <p class="card-text fs-3">GHc {{ total_revenue }}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-  
-        {% comment %} Room Availability status {% endcomment %}
-        <div class='room_availability'>
-          Rooms: 
-          <div class='room_availability_status'>
-          </div>
-          <script>
-            let filteredConsumers = JSON.parse('{{ filtered_consumers_dict|safe }}');
-                        
-            const room = {{ hostel.room_details|safe }};
-            room_availability_status = document.querySelector('.room_availability_status');
-            room.forEach(r => 
-            room_availability_status.innerHTML += `
-            <div class='room_status'>
-              <strong>${r.number_in_room} in a room</strong>
-              <ul>
-                <li>Price per Year : $${r.price}</li>
-                <li>Number of rooms : ${r.number_of_rooms}</li>
-                <li>Total Occupancy : ${r.number_in_room * r.number_of_rooms}</li>
-                <li>Current Occupants: ${filteredConsumers[r.number_in_room]} </li>
-                <li>Room Status: ${filteredConsumers[r.number_in_room] < (r.number_of_rooms * r.number_in_room) ? 'Available' : 'Not Available'}</li>
-              </ul>
-            </div>`
-            )
-          </script>
-          </div>
-        
-        
-        <!-- Recent Activity -->
-        <div class="mt-5">
-          <h3>Recent Bookings</h3>
-          <table class="table table-hover">
-            <thead>
-              <tr>
-                <th>Guest</th>
-                <th>Property</th>
-                <th>Date</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>John Doe</td>
-                <td>Cozy Apartment</td>
-                <td>2024-11-15</td>
-                <td><span class="badge bg-success">Completed</span></td>
-              </tr>
-              <tr>
-                <td>Jane Smith</td>
-                <td>Modern Condo</td>
-                <td>2024-11-17</td>
-                <td><span class="badge bg-warning">Pending</span></td>
-              </tr>
-              <tr>
-                <td>Mark Lee</td>
-                <td>Beachside Villa</td>
-                <td>2024-11-20</td>
-                <td><span class="badge bg-danger">Cancelled</span></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+            </div>`;
+        });
+      </script>
+    </div>
+
+    <!-- Recent Bookings -->
+    <div class="tab-pane fade" id="bookings" role="tabpanel">
+      <h3>Recent Bookings</h3>
+      <table class="table table-striped">
+        <thead>
+          <tr><th>Guest</th><th>Property</th><th>Date</th></tr>
+        </thead>
+        <tbody>
+          {% for booking in hostel_consumers|slice:4 %}
+          <tr>
+            <td>{{ booking.user.username }}</td>
+            <td>{{ booking.room_id }} in a room</td>
+            <td>{{ booking.date_created }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Hostel Management -->
+    <div class="tab-pane fade" id="hostel_management" role="tabpanel">
+      <h3>Manage Property</h3>
+      {% if hostel %}
+        <a href="#" class="btn btn-warning">Edit Property</a>
+        <a href="#" class="btn btn-danger">Manage Rooms</a>
+      {% endif %}
+    </div>
+
+    <!-- Earnings & Financials -->
+    <div class="tab-pane fade" id="earnings" role="tabpanel">
+      <h3>Earnings Overview</h3>
+      <p class="text-success">Total Revenue: GHc {{ total_revenue }}</p>
+      <p>Filter by Month/Year</p>
+    </div>
+
+    <!-- User Management -->
+    <div class="tab-pane fade" id="users" role="tabpanel">
+      <h3>Manage Tenants</h3>
+      <ul class="list-group">
+        {% for consumer in hostel_consumers %}
+          <li class="list-group-item">{{ consumer.user.username }} - Room {{ consumer.room_id }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <!-- Reports & Insights -->
+    <div class="tab-pane fade" id="reports" role="tabpanel">
+      <h3>Booking Trends & Insights</h3>
+      <p>Graphs & Data Coming Soon...</p>
     </div>
   </div>
-  
+</div>
+
+<!-- Include Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

@@ -24,6 +24,9 @@ from managers.models import Manager
 
 import json
 
+from reviews.models import Reviews
+
+
 def add_hostel(request):
     form = Views_addHostel()
     if request.method == "POST":
@@ -145,6 +148,8 @@ def detail_hostel(request, id):
 
     print(hostel.room_details)
 
+    reviews = Reviews.objects.filter(hostel=hostel).order_by('-created_at')
+
     room_image_urls = []
     for room in json.loads(hostel.room_details):
         room_number = room['number_in_room'] # Replace with your logic to get the room number
@@ -160,6 +165,7 @@ def detail_hostel(request, id):
         'hostel': hostel,
         'room_images': room_image_urls,
         'paystack_public_key': settings.PAYSTACK_PUBLIC_KEY,
+        'reviews': reviews,
     }
     return render(request, template_name, context)
 
@@ -168,6 +174,9 @@ from payments.models import Payment
 
 @csrf_exempt
 def confirm_payment(request):
+    if not request.user.is_authenticated:
+        return redirect('signin')  # Redirect to signin if user is not authenticated
+
     if request.method == 'POST':
         try:
             request_data = json.loads(request.body)  # ✅ Store request body separately
@@ -211,8 +220,6 @@ def confirm_payment(request):
             consumer.hostel = Hostel.objects.get(id=hostel_id)
             consumer.amount = request_data.get('amount')
             consumer.save()
-
-
 
             return JsonResponse({
                 "success": True,

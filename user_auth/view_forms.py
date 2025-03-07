@@ -16,7 +16,7 @@ class View_user_signup(forms.Form):
     )) 
 
 class View_user_login(forms.Form): 
-    username   = forms.CharField()
+    name   = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput(
         attrs = {
             'type' : 'password'

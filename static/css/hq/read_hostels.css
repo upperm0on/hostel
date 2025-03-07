@@ -112,6 +112,37 @@
     list-style: none;
     color: var(--white2);
     transition: left 300ms ease;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+}
+
+#section2 .list-inline .list-inline-item .info1::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    border-radius: 15px;
+}
+
+#section2 .list-inline .list-inline-item .info1::-webkit-scrollbar-thumb {
+    background-color: var(--primary-color);
+    border-radius: 10px;
+}
+
+#section2 .list-inline .list-inline-item .info1::-webkit-scrollbar-thumb:hover {
+    background-color: var(--primary-color);
+}
+
+#section2 .list-inline .list-inline-item .info1::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 15px;
+}
+
+#section2 .list-inline .list-inline-item .info1 {
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) transparent;
+}
+
+#section2 .list-inline .list-inline-item .info1:hover {
+    scrollbar-color: var(--primary-color) transparent;
 }
 
 #section2 .list-inline .list-inline-item .info1 .title {

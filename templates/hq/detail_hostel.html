@@ -86,8 +86,27 @@
 </div>
 {% if request.user.is_authenticated %}
 <div class="ratings_n_reviews">
-  <div class="read_reviews"></div>
-  <div class="add_review"></div>
+  <div class="review">
+    <h3 class="section-title lobster-two-regular">Reviews</h3>
+  <ul class='list-inline'>
+  {% for review in reviews %}
+    <li class='list-inline-item'>
+      <div class="profile-pic"> {{ review.user.username|slice:":1" }}</div>
+      <div class="grouped">
+        <div class="name_and_rating">
+          <span class="user-name">{{ review.user }}</span>
+          {% if review.rating %}
+          <span class="rating"> {{ review.rating }} stars </span>
+          {% else %}
+          <span class="rating"> 0 </span>
+          {% endif %}
+        </div>
+        <span class="review-text">{{ review.review }}</span>
+      </div> 
+    </li>
+    <hr>
+  {% endfor %}
+  </ul>
 </div>
 {% endif %}
 <script src="https://js.paystack.co/v2/inline.js"></script>

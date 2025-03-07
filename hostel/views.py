@@ -43,6 +43,7 @@ def dashboard(request):
 
                 context['hostel_consumers_number'] = consumers.count()
                 context['consumers'] = consumers
+                context['hostel_consumers'] = hostel_users
 
                 room_details = json.loads(Hostel.objects.get(manager=manager).room_details)
 
@@ -52,7 +53,6 @@ def dashboard(request):
                     filtered_consumers_dict[detail['number_in_room']] = filtered_consumers
 
                     
-                print(filtered_consumers_dict)
                 context['filtered_consumers_dict'] = json.dumps(filtered_consumers_dict)
             else: 
                 context['err'] = "You do not have any hostel"
