@@ -7,6 +7,16 @@ from managers.models import Manager
 
 from payments.models import Payment
 
+from django.conf import settings
+
+from ratings.models import (
+    five_star,
+    four_star,
+    three_star,
+    two_star,
+    one_star
+)
+
 import json
 @login_required(login_url='/authenticate/login')
 def dashboard(request):
@@ -45,8 +55,31 @@ def dashboard(request):
                 context['consumers'] = consumers
                 context['hostel_consumers'] = hostel_users
 
-                room_details = json.loads(Hostel.objects.get(manager=manager).room_details)
+                context['media_url'] = settings.MEDIA_URL
 
+                room_details = Hostel.objects.get(manager=manager).room_details
+                room_details = json.loads(room_details)
+
+                total_rooms = 0
+                for i, detail in enumerate(room_details):
+                    i = 1
+                    total_rooms += i
+
+                context['total_rooms'] = total_rooms
+                stars_list = [one_star, two_star, three_star, four_star, five_star]
+
+                total_star = 0
+                total_ratings_count = 0
+            
+
+                for i, star_model in enumerate(stars_list):
+                    star_count = star_model.objects.filter(product=hostel).count()
+                    total_star += star_count * (i + 1)
+                    total_ratings_count += star_count
+
+                total_rate = total_star / total_ratings_count if total_ratings_count > 0 else 0
+
+                context['ratings'] = round(total_rate, 1)
                 filtered_consumers_dict = dict()
                 for detail in room_details: 
                     filtered_consumers = consumers.filter(room_id=int(detail['number_in_room'])).count()
@@ -56,6 +89,8 @@ def dashboard(request):
                 context['filtered_consumers_dict'] = json.dumps(filtered_consumers_dict)
             else: 
                 context['err'] = "You do not have any hostel"
+
+                
     except Manager.DoesNotExist:
         pass  # Not a manager
 

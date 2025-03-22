@@ -64,11 +64,14 @@ room_info.addEventListener("click", () => {
         const element = document.createElement("div");
         element.classList.add("add_info_item");
         element.innerHTML = `
+                        <h6 style='font-family: var(--font1);'><center>Room Information<center></h6>
                         <input type='number' class='add_room_number' placeholder='How many in a Room?'/>
                         <input type='number' class='quantity' name='quantity' placeholder='How many rooms?'/>
                         <input class='price' type='number' placeholder='Price'>
                         <input type='file' name='room_image' class='room_image'>
-                        <button type='button' class='room_amenity_btn' data-room-id='${uniqueRoomId}'>Add Amenity</button>
+                        <button type='button' class='room_amenity_btn' data-room-id='${uniqueRoomId}'>
+                            <i class="fas fa-plus-circle"></i> Add Amenity
+                        </button>
                         <input type='hidden' value='' class='room_amenities_hidden' data-room-id='${uniqueRoomId}'>
         `;
         add_room_info.appendChild(element);

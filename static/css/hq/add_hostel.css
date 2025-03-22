@@ -114,18 +114,93 @@ form .form-obj .add_info_center .add_info_item .add_info_item_here:focus {
   outline: none;
 }
 
+form .form-obj .add_room_details_center {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two columns layout */
+  gap: 20px; /* Adds spacing between items */
+}
+
 form .form-obj .add_room_details_center .add_info_item {
-  margin: 20px;
+  padding: 15px;
+  border-radius: 12px;
+  width: 100%; /* Ensures consistent width */
+}
+
+form .form-obj .add_room_details_center .add_info_item input[type='number'] {
+  width: 200px; /* Reduced width for better fit */
+  height: 45px;
+  padding: 8px;
+  outline: none;
+  margin: 8px;
+  color: var(--black);
+  border: 2px solid var(--white2);
+  border-radius: 6px; /* Slightly rounded edges */
+  font-size: 0.95rem;
+  font-family: var(--font1);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+form .form-obj .add_room_details_center .add_info_item input[type='number']:focus {
+  border-color: var(--black2); /* Highlight border on focus */
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for focus */
+}
+
+form .form-obj .add_room_details_center .add_info_item input[type='file'] {
+  width: 200px; /* Reduced width for consistency */
+  height: 45px;
+  padding: 8px;
+  outline: none;
+  margin: 8px;
+  color: var(--black);
+  border: 2px solid var(--white2);
+  border-radius: 6px; /* Slightly rounded edges */
+  font-size: 0.95rem;
+  font-family: var(--font1);
+  background: var(--primary-color-light); /* Light blue background */
+  cursor: pointer;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+form .form-obj .add_room_details_center .add_info_item input[type='file']:hover {
+  border-color: var(--black2); /* Highlight border on hover */
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for hover */
+  background-color: var(--primary-color); /* Slightly darker blue on hover */
+}
+
+form .form-obj .add_room_details_center .add_info_item input[type='file']::file-selector-button {
+  padding: 6px 12px;
+  background: var(--primary-color);
+  color: var(--white);
+  border: none;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  font-family: var(--font1);
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+form .form-obj .add_room_details_center .add_info_item input[type='file']::file-selector-button:hover {
+  background-color: var(--primary-color-dark); /* Darker shade on hover */
+  transform: scale(1.05); /* Slight zoom effect */
 }
 
 form .form-obj .add_room_details_center .add_info_item .room_amenity_btn {
-  padding: 10 15;
-  background: var(--black);
-  border-radius: 15px;
-  color: var(--white);
+  display: block;
+  padding: 12px 18px; /* Slightly larger padding for better touch target */
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-color-dark)); /* Gradient for modern look */
+  border-radius: 10px; /* More rounded corners */
+  color: var(--black2);
   border: none;
-  font-size: 0.85rem;
-  font-weight: 450px;
+  font-size: 1rem; /* Slightly larger font for readability */
+  font-weight: 600; /* Increased weight for emphasis */
+  cursor: pointer;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+form .form-obj .add_room_details_center .add_info_item .room_amenity_btn:hover {
+  background-color: var(--primary-color-dark); /* Darker shade on hover */
+  transform: scale(1.05); /* Slight zoom effect */
 }
 
 form .form-obj .add_room_details_center .add_info_item input {

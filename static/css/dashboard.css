@@ -1,10 +1,13 @@
+/* Import Section */
 @import url('../css/config.css');
 
+/* Main Layout */
 main {
     display: flex;
     flex-direction: column;
 }
 
+/* Section 1: Hero Section */
 #section1 {
     width: 800px;
     margin: 0 auto;
@@ -45,6 +48,7 @@ main {
     border-radius: 15px;
 }
 
+/* Recommended Hostels Section */
 #recommended_hostels p {
     font-size: 2rem;
     font-family: var(--font2);
@@ -59,6 +63,7 @@ main {
     padding: 10px 30px;
 }
 
+/* Section 2: Horizontal Scroll Section */
 #section2 {
     display: flex;
     overflow-y: scroll;
@@ -220,12 +225,14 @@ main {
     z-index: 4;
 }
 
+/* General Container */
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
 }
 
+/* Profile Header */
 .profile-header {
     text-align: left;
     margin-bottom: 30px;
@@ -238,6 +245,7 @@ main {
     font-size: 2.5rem;
 }
 
+/* Main Content Section */
 .main-content {
     display: flex;
     gap: 20px;
@@ -253,9 +261,7 @@ main {
     font-family: var(--font1);
     padding: 20px;
     width: 100%;
-    /* Flex width */
     max-width: 360px;
-    /* Limit width for consistency */
 }
 
 .main-content .card img {
@@ -269,6 +275,7 @@ main {
     padding: 15px 0;
 }
 
+/* Section Titles */
 .section-title {
     font-weight: 700;
     font-size: 1.5rem;
@@ -289,12 +296,14 @@ main {
     border-radius: 15px;
 }
 
+/* Info Text */
 .info-text {
     font-size: 1rem;
     color: var(--black3);
     line-height: 1.6;
 }
 
+/* Buttons */
 .btn-primary {
     width: 100%;
     background-color: var(--red);
@@ -308,6 +317,7 @@ main {
     margin-top: 15px;
 }
 
+/* Ratings and Reviews Section */
 .ratings_n_reviews {
     margin: 50px auto;
     width: 50%;
@@ -332,11 +342,11 @@ main {
 }
 
 .ratings_n_reviews .add_rating .star-rating label {
-    font-size: 4rem; /* Increased size */
+    font-size: 4rem;
     color: var(--white);
     cursor: pointer;
     transition: color 200ms, text-shadow 200ms;
-    text-shadow: 0 0 5px var(--black); /* Changed to black */
+    text-shadow: 0 0 5px var(--black);
 }
 
 .ratings_n_reviews .add_rating .star-rating input[type="radio"]:checked ~ label,
@@ -357,6 +367,79 @@ main {
     margin-bottom: 20px;
 }
 
+/* Manager and Hostel Cards */
+.manager-card-body, .hostel-card-body {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 1rem;
+}
+
+.profile-picture, .hostel-image {
+    width: 100%;
+    height: 100%;
+}
+
+.default-profile-picture, .no-hostel-image {
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 100px;
+    background-color: #f0f0f0;
+    border-radius: 50%;
+    font-size: 5rem;
+    font-weight: 400;
+    color: #555;
+}
+
+.room-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    overflow-x: scroll;
+    scroll-behavior: smooth;
+}
+
+.room-section .room-details {
+    min-width: 48%;
+    height: 400px;
+    margin: 10px;
+    position: relative;
+    border-radius: 15px;
+}
+
+.room-section .room-details .room-details-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 30px;
+    list-style: none;
+    color: var(--white2);
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.8));
+    width: 100%;
+}
+
+.room-section .room-details .room-details-list li h4{
+    color: var(--white)
+}
+
+/* Report Categories */
+.report-category {
+    display: none;
+}
+
+/* Charts */
+#bookingTrendsChart, #revenueInsightsChart {
+    height: 400px;
+}
+
+#occupancyRatesChart, #customerInsightsChart {
+    height: 300px;
+}
 
 /* Responsive Design */
 @media (max-width: 992px) {

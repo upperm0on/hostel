@@ -44,12 +44,15 @@
           json_data = JSON.parse(
             document.querySelector(".room-details{{ hostel.id }}").textContent
           );
-          json_data.forEach((data) => {
+            json_data.forEach((data) => {
             element = document.createElement("li");
             element.classList.add("list-inline-item");
             element.innerHTML =
-              `${data["number_in_room"]} in a Room at <strong>${data["price"]}</strong> GHC` +
+              `${data["number_in_room"]} in a Room at <strong>${data["price"]}</strong> GHC`;
+            {% if not manager %}
+            element.innerHTML +=
               ` <button type="button" class="btn btn-outline-secondary room_info_btn" data-room-info='${data["number_in_room"]}' data-price="${data['price']}" data-hostel-id='{{ hostel.id }}' data-hostel-name='{{ hostel.name }}' data-room-image='${data["room_image"]}' data-amenities='${data['amenities']}'> Apply </button>`;
+            {% endif %}
             append_here.appendChild(element);
           });
         </script>

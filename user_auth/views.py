@@ -14,6 +14,7 @@ def user_signup(request):
     template = 'user_login/login.html'
     message = 'Sign Up Here'
     forms = View_user_signup() 
+    error_msg = ''
     if request.method == "POST":
         forms = View_user_signup(request.POST)
         if forms.is_valid():
@@ -21,17 +22,21 @@ def user_signup(request):
             email = forms.cleaned_data['email']
             password = forms.cleaned_data['password']
 
-            user = User.objects.create(username=username, email=email) 
-            user.set_password(password)
-            user.save()
+            if User.objects.filter(username=username).exists():
+                error_msg = 'The username is already taken. Please choose a different one.'
+            else:
+                user = User.objects.create(username=username, email=email) 
+                user.set_password(password)
+                user.save()
 
-            user = authenticate(request, username=username, password=password)
-            if user is not None: 
-                login(request, user)
-                return redirect('/dashboard/')
+                user = authenticate(request, username=username, password=password)
+                if user is not None: 
+                    login(request, user)
+                    return redirect('/dashboard/')
     context = {
         'forms' : forms,
         'msg': message,
+        'error_msg': error_msg,
     }
     return render(request, template, context)
 

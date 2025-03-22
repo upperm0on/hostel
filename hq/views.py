@@ -148,6 +148,8 @@ def detail_hostel(request, id):
 
     print(hostel.room_details)
 
+    manager = Manager.objects.get(user=request.user)
+
     reviews = Reviews.objects.filter(hostel=hostel).order_by('-created_at')
 
     room_image_urls = []
@@ -166,6 +168,7 @@ def detail_hostel(request, id):
         'room_images': room_image_urls,
         'paystack_public_key': settings.PAYSTACK_PUBLIC_KEY,
         'reviews': reviews,
+        'manager': manager,
     }
     return render(request, template_name, context)
 

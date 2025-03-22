@@ -3,20 +3,95 @@
 <div class="container my-5">
   <!-- Navigation Tabs -->
   <ul class="nav nav-tabs" id="dashboardTabs" role="tablist">
-    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#overview" role="tab">Dashboard</a></li>
-    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#statistics" role="tab">Statistics</a></li>
+    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#dashboard" role="tab">Dashboard</a></li>
     <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#room_availability" role="tab">Room Availability</a></li>
     <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#bookings" role="tab">Recent Bookings</a></li>
-    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#hostel_management" role="tab">Hostel Management</a></li>
     <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#earnings" role="tab">Earnings & Financials</a></li>
-    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#users" role="tab">User Management</a></li>
     <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#reports" role="tab">Reports & Insights</a></li>
     <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#profile" role="tab">Profile</a></li>
   </ul>
 
   <div class="tab-content mt-3">
     <!-- Other Tabs Content -->
+    <div class="tab-pane fade" id="dashboard" role="tabpanel">
+      <!-- Hostel Manager Details -->
+       <div class="row">
+      <div class="col-md-6 manager-details">
+      <div class="card mb-3">
+        <div class="card-body d-grid manager-card-body">
+        <div>
+          {% if request.user.profile_picture %}
+          <img src="{{ request.user.profile_picture.url }}" alt="Profile Picture" class="img-thumbnail profile-picture">
+          {% else %}
+          <div class="default-profile-picture">
+            {{ request.user.username|slice:":1"|upper }}
+          </div>
+          {% endif %}
+        </div>
+        <div>
+          <h5 class="card-title">User Details</h5>
+          <p><strong>Name:</strong> {{ request.user.username }}</p>
+          <p><strong>Email:</strong> {{ request.user.email }}</p>
+          <p><strong>Phone:</strong> {{ request.user.profile.phone_number|default:"Not Provided" }}</p>
+          <p><strong>Role:</strong> Hostel Manager</p>
+        </div>
+        </div>
+      </div>
+      </div>
 
+    <!-- Hostel Details -->
+    <div class="col-md-6">
+      <div class="card mb-3">
+      <div class="card-body d-grid hostel-card-body">
+        {% if hostel %}
+        <div>
+        {% if hostel.image %}
+        <img src="{{ hostel.image.url }}" alt="Hostel Image" class="img-thumbnail hostel-image">
+        {% else %}
+        <div class="no-hostel-image">
+          No Image Available
+        </div>
+        {% endif %}
+        </div>
+        <div>
+        <h5 class="card-title">Hostel Details</h5>
+        <p><strong>Hostel Name:</strong> {{ hostel.name }}</p>
+        <p><strong>Location:</strong> {{ hostel.location }}</p>
+        <p><strong>Total Rooms:</strong> {{ total_rooms }}</p>
+        <p><strong>Rating:</strong> {{ ratings|default:"No Ratings Yet" }}</p>
+        </div>
+        {% else %}
+        <div>
+        <h5 class="card-title">No Hostel Found</h5>
+        <p>You currently do not have a hostel property listed. Add your property to start managing it effectively.</p>
+        <a href="{% url 'add_hostel' %}" class="btn btn-primary">Add Property</a>
+        </div>
+        {% endif %}
+      </div>
+      </div>
+    </div>
+    {% if hostel %}
+    <div class='room-details-section mt-5'>
+      <h5 class='room-details-title'>Room Details</h5>
+      <div class='room-section'></div>
+      <script type='text/javascript'> 
+      const room_details = {{ hostel.room_details|safe }};
+      room_details.forEach(room => {
+        document.querySelector('.room-section').innerHTML += `
+        <div class='room-details' style='background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 70%, rgba(0, 0, 0, 0.9) 100%), url({{ media_url }}/room_images/{{ hostel.name }}/${room.number_in_room}/${room.room_image}) no-repeat center center/cover'>
+          <ul class="room-details-list">
+          <li> <h4 style="font-weight: bold; font-family: var(--font2); text-transform: capitalize; "> ${room.number_in_room} in a room <h4> </li>
+          <li><strong>Number of Rooms:</strong> ${room.number_of_rooms}</li>
+          <li><strong>Price:</strong> ${room.price}</li>
+          </ul>
+        </div>
+        `
+      });
+      </script>
+    </div>
+    {% endif %}
+</div>
+</div>
     <!-- Reports & Insights -->
     <div class="tab-pane fade" id="reports" role="tabpanel">
       <h3>Reports & Insights</h3>
