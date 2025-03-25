@@ -146,9 +146,10 @@ def detail_hostel(request, id):
     hostel = Hostel.objects.get(id=id)
     hostel_name = hostel.name  # Replace with your logic to get the hostel name
 
-    print(hostel.room_details)
-
-    manager = Manager.objects.get(user=request.user)
+    if request.user.is_authenticated:
+        manager = Manager.objects.get(user=request.user)
+    else: 
+        manager = None
 
     reviews = Reviews.objects.filter(hostel=hostel).order_by('-created_at')
 

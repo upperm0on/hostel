@@ -4,7 +4,6 @@
   <!-- Navigation Tabs -->
   <ul class="nav nav-tabs" id="dashboardTabs" role="tablist">
     <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#dashboard" role="tab">Dashboard</a></li>
-    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#room_availability" role="tab">Room Availability</a></li>
     <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#bookings" role="tab">Recent Bookings</a></li>
     <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#earnings" role="tab">Earnings & Financials</a></li>
     <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#reports" role="tab">Reports & Insights</a></li>
@@ -48,9 +47,6 @@
         {% if hostel.image %}
         <img src="{{ hostel.image.url }}" alt="Hostel Image" class="img-thumbnail hostel-image">
         {% else %}
-        <div class="no-hostel-image">
-          No Image Available
-        </div>
         {% endif %}
         </div>
         <div>
@@ -76,6 +72,7 @@
       <div class='room-section'></div>
       <script type='text/javascript'> 
       const room_details = {{ hostel.room_details|safe }};
+      let filtered_users = {{ filtered_consumers_dict|safe }};
       room_details.forEach(room => {
         document.querySelector('.room-section').innerHTML += `
         <div class='room-details' style='background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 70%, rgba(0, 0, 0, 0.9) 100%), url({{ media_url }}/room_images/{{ hostel.name }}/${room.number_in_room}/${room.room_image}) no-repeat center center/cover'>
@@ -83,6 +80,12 @@
           <li> <h4 style="font-weight: bold; font-family: var(--font2); text-transform: capitalize; "> ${room.number_in_room} in a room <h4> </li>
           <li><strong>Number of Rooms:</strong> ${room.number_of_rooms}</li>
           <li><strong>Price:</strong> ${room.price}</li>
+            <ul class="inner-list-inline" style="list-style: none;">
+            <h5 style="font-weight: bold; font-family: var(--font2); text-transform: capitalize; color: white;" class="text-white">Occupancy Details</h5>
+            <li><strong>Total Occupancy:</strong> <span style="font-weight: bold; color: white;">${room.number_in_room * room.number_of_rooms}</span></li>
+            <li><strong>Current Occupants:</strong> <span style="font-weight: bold; color: white;">${filtered_users[room.number_in_room]}</span></li>
+            <li><strong>Available spaces:</strong> <span style="font-weight: bold; color: white;">${(room.number_in_room * room.number_of_rooms) - filtered_users[room.number_in_room]}</span></li>
+            </ul>
           </ul>
         </div>
         `
@@ -91,7 +94,72 @@
     </div>
     {% endif %}
 </div>
+
+  <!-- Room Availability -->
 </div>
+  <div class='tab-pane fade' id='bookings' role='tabpanel'>
+    <style>
+      .recent-bookings-table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+      }
+
+      .recent-bookings-table th, .recent-bookings-table td {
+      padding: 15px;
+      text-align: left;
+      border: 1px solid #ddd;
+      }
+
+      .recent-bookings-table th {
+      background-color: #f8f9fa;
+      font-weight: bold;
+      }
+
+      .recent-bookings-table tbody tr:nth-child(even) {
+      background-color: #f2f2f2;
+      }
+
+      .recent-bookings-table tbody tr:hover {
+      background-color: #e9ecef;
+      }
+
+      .recent-bookings-container {
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .recent-bookings-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+      }
+    </style>
+
+    <div class="recent-bookings-container">
+      <h3 class="recent-bookings-title">Recent Bookings</h3>
+      <table class="recent-bookings-table table table-striped">
+      <thead>
+        <tr>
+        <th>Name</th>
+        <th>Room</th>
+        <th>Check-in</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for booking in consumers %}
+        <tr>
+          <td>{{ booking.user.username|capfirst }}</td>
+          <td><strong>{{ booking.room_id }} </strong> in a Room</td>
+          <td>{{ booking.date_created }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      </table>
+    </div>
+  </div>
     <!-- Reports & Insights -->
     <div class="tab-pane fade" id="reports" role="tabpanel">
       <h3>Reports & Insights</h3>
