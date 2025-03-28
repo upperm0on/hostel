@@ -144,12 +144,15 @@ def search_hostel(request, rooms):
 def detail_hostel(request, id): 
     template_name = 'hq/detail_hostel.html'
     hostel = Hostel.objects.get(id=id)
-    hostel_name = hostel.name  # Replace with your logic to get the hostel name
+    hostel_name = slugify(hostel.name)  # Slugify the hostel name to replace spaces with hyphens
 
-    if request.user.is_authenticated:
-        manager = Manager.objects.get(user=request.user)
-    else: 
-        manager = None
+    manager = None
+    
+    try: 
+        if request.user.is_authenticated:
+            manager = Manager.objects.get(user=request.user)
+    except: 
+        pass
 
     reviews = Reviews.objects.filter(hostel=hostel).order_by('-created_at')
 
@@ -175,6 +178,7 @@ def detail_hostel(request, id):
 
 from consumers.models import Consumer
 from payments.models import Payment
+from django.utils.text import slugify
 
 @csrf_exempt
 def confirm_payment(request):

@@ -6,7 +6,6 @@
     <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#dashboard" role="tab">Dashboard</a></li>
     <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#bookings" role="tab">Recent Bookings</a></li>
     <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#earnings" role="tab">Earnings & Financials</a></li>
-    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#reports" role="tab">Reports & Insights</a></li>
     <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#profile" role="tab">Profile</a></li>
   </ul>
 
@@ -75,7 +74,7 @@
       let filtered_users = {{ filtered_consumers_dict|safe }};
       room_details.forEach(room => {
         document.querySelector('.room-section').innerHTML += `
-        <div class='room-details' style='background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 70%, rgba(0, 0, 0, 0.9) 100%), url({{ media_url }}/room_images/{{ hostel.name }}/${room.number_in_room}/${room.room_image}) no-repeat center center/cover'>
+        <div class='room-details' style='background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 70%, rgba(0, 0, 0, 0.9) 100%), url("{{ media_url }}room_images/{{ hostel.name }}/${room.number_in_room}/${room.room_image}") no-repeat center center/cover'>
           <ul class="room-details-list">
           <li> <h4 style="font-weight: bold; font-family: var(--font2); text-transform: capitalize; "> ${room.number_in_room} in a room <h4> </li>
           <li><strong>Number of Rooms:</strong> ${room.number_of_rooms}</li>
@@ -160,165 +159,113 @@
       </table>
     </div>
   </div>
-    <!-- Reports & Insights -->
-    <div class="tab-pane fade" id="reports" role="tabpanel">
-      <h3>Reports & Insights</h3>
-      <div class="btn-group mb-3" role="group" aria-label="Report Categories">
-        <button type="button" class="btn btn-secondary" onclick="showCategory('booking_and_occupancy')">Booking Trends & Occupancy Rates</button>
-        <button type="button" class="btn btn-secondary" onclick="showCategory('revenue_and_customer')">Revenue & Customer Insights</button>
-        <button type="button" class="btn btn-secondary" onclick="showCategory('managerial_insights')">Managerial Insights</button>
-      </div>
 
-      <div id="reportContent">
-        <!-- Booking Trends & Occupancy Rates -->
-        <div id="booking_and_occupancy" class="report-category">
-          <h4>Booking Trends & Occupancy Rates</h4>
-          <div class="row">
-            <div class="col-md-8">
-              <canvas id="bookingTrendsChart"></canvas>
+    <div class="tab-pane fade show" id="earnings" role="tabpanel">
+      <div class="container mt-4">
+        <h3 class="mb-4 text-center"><i class="fas fa-wallet text-primary"></i> Earnings & Financials</h3>
+        <div class="row">
+          <!-- Current Month Earnings -->
+          <div class="col-md-6">
+            <div class="card mb-3 shadow-sm">
+              <div class="card-body text-center">
+                <i class="fas fa-calendar-alt fa-3x text-primary mb-3"></i>
+                <h5 class="card-title">Current Month Earnings</h5>
+                <p><strong>Month:</strong> {{ current_month }}</p>
+                <p><strong>Total Earnings:</strong> <span class="text-success">${{ current_month_earnings }}</span></p>
+                <p><strong>Last Updated:</strong> {{ last_updated|date:"F j, Y, g:i a" }}</p>
+              </div>
             </div>
-            <div class="col-md-4">
-              <canvas id="occupancyRatesChart"></canvas>
+          </div>
+
+          <!-- Previous Month Earnings -->
+          <div class="col-md-6">
+            <div class="card mb-3 shadow-sm">
+              <div class="card-body text-center">
+                <i class="fas fa-history fa-3x text-warning mb-3"></i>
+                <h5 class="card-title">Previous Month Earnings</h5>
+                <p><strong>Month:</strong> {{ previous_month }}</p>
+                <p><strong>Total Earnings:</strong> <span class="text-success">${{ previous_month_earnings }}</span></p>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Revenue & Customer Insights -->
-        <div id="revenue_and_customer" class="report-category" style="display: none;">
-          <h4>Revenue & Customer Insights</h4>
-          <div class="row">
-            <div class="col-md-8">
-              <canvas id="revenueInsightsChart"></canvas>
+        <div class="row">
+          <!-- Year-to-Date Earnings -->
+          <div class="col-md-6">
+            <div class="card mb-3 shadow-sm">
+              <div class="card-body text-center">
+                <i class="fas fa-chart-line fa-3x text-success mb-3"></i>
+                <h5 class="card-title">Year-to-Date Earnings</h5>
+                <p><strong>Total Earnings:</strong> <span class="text-success">${{ year_to_date_earnings }}</span></p>
+                <p><strong>Number of Transactions:</strong> {{ total_transactions }}</p>
+              </div>
             </div>
-            <div class="col-md-4">
-              <canvas id="customerInsightsChart"></canvas>
+          </div>
+
+          <!-- Financial Insights -->
+          <div class="col-md-6">
+            <div class="card mb-3 shadow-sm">
+              <div class="card-body text-center">
+                <i class="fas fa-lightbulb fa-3x text-info mb-3"></i>
+                <h5 class="card-title">Financial Insights</h5>
+                <p><strong>Growth Rate (Month-over-Month):</strong> <span class="text-success">{{ growth_rate }}%</span></p>
+                <p><strong>Highest Earning Month:</strong> {{ highest_earning_month }} (<span class="text-success">${{ highest_earning_amount }}</span>)</p>
+                <p><strong>Lowest Earning Month:</strong> {{ lowest_earning_month }} (<span class="text-danger">${{ lowest_earning_amount }}</span>)</p>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Managerial Insights -->
-        <div id="managerial_insights" class="report-category" style="display: none;">
-          <h4>Managerial Insights</h4>
-          <ul>
-            <li>Underperforming rooms</li>
-            <li>Maintenance alerts</li>
-            <li>Suggested price adjustments</li>
-          </ul>
+        <div class="row">
+          <!-- Upcoming Payments -->
+          <div class="col-md-12">
+            <div class="card mb-3 shadow-sm">
+              <div class="card-body text-center">
+                <i class="fas fa-money-check-alt fa-3x text-danger mb-3"></i>
+                <h5 class="card-title">Upcoming Payments</h5>
+                <p><strong>Next Payment Date:</strong> {{ next_payment_date|date:"F j, Y" }}</p>
+                <p><strong>Expected Amount:</strong> <span class="text-success">${{ next_payment_amount }}</span></p>
+                <p><strong>Payment Method:</strong> {{ payment_method }}</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
+    <!-- Add FontAwesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <!-- Profile -->
     <div class="tab-pane fade show active" id="profile" role="tabpanel">
-      <h3>Profile Information</h3>
-      <div class="card mb-3">
-        <div class="card-body">
-          <img src="{{ request.user.profile_picture.url }}" alt="Profile Picture" class="img-thumbnail mb-3" style="width: 150px;">
-          <p><strong>Name:</strong> {{ request.user.get_full_name }}</p>
-          <p><strong>Email:</strong> {{ request.user.email }}</p>
-          <p><strong>Phone number:</strong> {{ request.user.profile.phone_number }}</p>
-          <p><strong>Role:</strong> Hostel Manager</p>
-          <p><strong>Date joined:</strong> {{ request.user.date_joined }}</p>
+      <h3><i class="fas fa-user-circle text-primary"></i> Profile Information</h3>
+      <div class="row">
+        <!-- Profile Information -->
+        <div class="col-md-6">
+          <div class="card mb-3 shadow-sm">
+            <div class="card-body" style="padding: 20px; font-size: 1.2rem;">
+              <p style="margin-bottom: 15px;"><i class="fas fa-user text-secondary"></i> <strong>Name:</strong> {{ request.user.username|capfirst }}</p>
+              <p style="margin-bottom: 15px;"><i class="fas fa-envelope text-secondary"></i> <strong>Email:</strong> {{ request.user.email }}</p>
+              <p style="margin-bottom: 15px;"><i class="fas fa-phone text-secondary"></i> <strong>Phone number:</strong> {{ request.user.profile.phone_number }}</p>
+              <p style="margin-bottom: 15px;"><i class="fas fa-user-tag text-secondary"></i> <strong>Role:</strong> Hostel Manager</p>
+              <p style="margin-bottom: 15px;"><i class="fas fa-calendar-alt text-secondary"></i> <strong>Date joined:</strong> {{ request.user.date_joined }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Account Settings -->
+        <div class="col-md-6">
+          <h3 class="text-center"><i class="fas fa-cogs text-primary"></i> Account Settings</h3>
+          <div class="d-grid gap-2">
+            <a href="#" class="btn btn-primary"><i class="fas fa-key"></i> Change Password</a>
+            <a href="#" class="btn btn-secondary"><i class="fas fa-user-edit"></i> Update Profile Details</a>
+            <a href="#" class="btn btn-info"><i class="fas fa-bell"></i> Notification Preferences</a>
+          </div>
         </div>
       </div>
-      <h3>Account Settings</h3>
-      <a href="#" class="btn btn-primary mb-2">Change Password</a>
-      <a href="#" class="btn btn-secondary mb-2">Update Profile Details</a>
-      <a href="#" class="btn btn-info">Notification Preferences</a>
     </div>
   </div>
 </div>
 
 <!-- Include Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Include Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<script>
-  function showCategory(category) {
-    document.querySelectorAll('.report-category').forEach(function(el) {
-      el.style.display = 'none';
-    });
-    document.getElementById(category).style.display = 'block';
-  }
-
-  // Example data for charts
-  const bookingTrendsData = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-    datasets: [{
-      label: 'Bookings',
-      data: [10, 20, 30, 40, 50, 60],
-      borderColor: 'rgba(75, 192, 192, 1)',
-      borderWidth: 1
-    }]
-  };
-
-  const revenueInsightsData = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-    datasets: [{
-      label: 'Revenue',
-      data: [1000, 2000, 3000, 4000, 5000, 6000],
-      backgroundColor: 'rgba(153, 102, 255, 0.2)',
-      borderColor: 'rgba(153, 102, 255, 1)',
-      borderWidth: 1
-    }]
-  };
-
-  const occupancyRatesData = {
-    labels: ['Available', 'Occupied'],
-    datasets: [{
-      label: 'Occupancy Rates',
-      data: [30, 70],
-      backgroundColor: ['rgba(255, 206, 86, 0.2)', 'rgba(54, 162, 235, 0.2)'],
-      borderColor: ['rgba(255, 206, 86, 1)', 'rgba(54, 162, 235, 1)'],
-      borderWidth: 1
-    }]
-  };
-
-  const customerInsightsData = {
-    labels: ['New', 'Returning'],
-    datasets: [{
-      label: 'Customer Insights',
-      data: [40, 60],
-      backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(75, 192, 192, 0.2)'],
-      borderColor: ['rgba(255, 99, 132, 1)', 'rgba(75, 192, 192, 1)'],
-      borderWidth: 1
-    }]
-  };
-
-  // Initialize charts
-  const bookingTrendsChart = new Chart(document.getElementById('bookingTrendsChart'), {
-    type: 'line',
-    data: bookingTrendsData
-  });
-
-  const revenueInsightsChart = new Chart(document.getElementById('revenueInsightsChart'), {
-    type: 'bar',
-    data: revenueInsightsData
-  });
-
-  const occupancyRatesChart = new Chart(document.getElementById('occupancyRatesChart'), {
-    type: 'doughnut',
-    data: occupancyRatesData
-  });
-
-  const customerInsightsChart = new Chart(document.getElementById('customerInsightsChart'), {
-    type: 'pie',
-    data: customerInsightsData
-  });
-
-  // Show Booking Trends & Occupancy Rates by default
-  document.addEventListener('DOMContentLoaded', function() {
-    showCategory('booking_and_occupancy');
-  });
-</script>
-
-<style>
-  #bookingTrendsChart, #revenueInsightsChart {
-    height: 400px;
-  }
-
-  #occupancyRatesChart, #customerInsightsChart {
-    height: 300px;
-  }
-</style>

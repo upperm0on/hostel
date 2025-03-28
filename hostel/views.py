@@ -59,6 +59,25 @@ def dashboard(request):
 
                 room_details = Hostel.objects.get(manager=manager).room_details
                 room_details = json.loads(room_details)
+                
+                payment_data = Payment.objects.filter(consumer__hostel__manager=manager)
+                
+                RevenueInsight = dict()
+
+                for data in payment_data: 
+                    month = data.timestamp.strftime("%B")[:3]
+                    RevenueInsight[month] = RevenueInsight.get(month, 0) + data.amount
+
+                # Convert the data map into a format suitable for Google Charts
+                bookingTrendsDataList = [["Month", "Revenue"]]
+                for month, revenue in RevenueInsight.items():
+                    bookingTrendsDataList.append([month, revenue])
+
+                # Pass the data as JSON to the context for use in JavaScript
+                context['RevenueInsight'] = json.dumps(RevenueInsight)
+                print(RevenueInsight)
+
+
 
                 total_rooms = 0
                 for i, detail in enumerate(room_details):
