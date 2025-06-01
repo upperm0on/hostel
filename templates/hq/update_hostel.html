@@ -87,7 +87,7 @@
                                 const roomImageInput = document.createElement('input');
                                 roomImageInput.type = 'file';
                                 roomImageInput.classList.add('room_image');
-                                roomImageInput.name = `room_image_${index + 1}`;
+                                roomImageInput.name = `room_image`;
 
                                 const existingImage = document.createElement('img');
                                 if (room.room_image) {
@@ -240,8 +240,8 @@
                 
                 <!-- Submission Section -->
                 <div class="form-obj slide">
-                    <input type="hidden" name="hidden_data" class="hidden_data" value="0">
-                    <input type="hidden" name="hidden_info_data" class="hidden_info_data" value="0">
+                    <input type="hidden" name="hidden_data" class="hidden_data">
+                    <input type="hidden" name="hidden_info_data" class="hidden_info_data">
                     <center><button type="submit" class="submit">Submit</button></center>
                 </div>
             </div>

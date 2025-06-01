@@ -109,7 +109,44 @@ def update_hostel(request, id):
     if request.method == "POST":
         form = Views_addHostel(request.POST, request.FILES, instance=hostel_instance)
         if form.is_valid():
-            form.save()
+            instance = form.save(commit=False)
+            hidden_data = request.POST.get('hidden_data', '[]')  # Default to empty list JSON
+
+            try:
+                room_details = json.loads(hidden_data)
+                print("Parsed room details:", room_details)
+            except json.JSONDecodeError as e:
+                print(f"Error parsing JSON: {e}")
+                room_details = []
+
+            instance.room_details = hidden_data
+            instance.additional_details = request.POST.get('hidden_info_data', '')
+            manager = Manager.objects.get(user=request.user)
+
+            instance.manager = manager
+
+            room_images = request.FILES.getlist('room_image')
+            print(request.FILES)
+            print("Room images:", room_images)
+
+            count = 0
+            for room_image in room_images:
+                room_number = str(room_details[count]['number_in_room']) if isinstance(room_details, list) and count < len(room_details) else str(count)
+
+                room_image_path = os.path.join(settings.MEDIA_ROOT, 'room_images', instance.name, room_number)
+                os.makedirs(room_image_path, exist_ok=True)  # Ensure the directory exists
+
+                try:
+                    image_path = os.path.join(room_image_path, room_image.name)
+                    with open(image_path, 'wb+') as destination:
+                        for chunk in room_image.chunks():
+                            destination.write(chunk)
+                    print(f"Image saved at: {image_path}")
+                    count += 1  # Increment the count only after successful processing
+                except Exception as e:
+                    print(f"Error saving image {room_image.name}: {e}")
+                
+            instance.save()
             return redirect('/hq/read_hostel/')
     else:
         form = Views_addHostel(instance=hostel_instance)

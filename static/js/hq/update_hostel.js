@@ -207,6 +207,8 @@ submit_btn.addEventListener("click", (e) => {
 
     // Convert arrays to JSON strings for the hidden inputs
     hidden_infos_input.value = JSON.stringify(info_details);
+
+    console.log(hidden_infos_input.value);
     hidden_data.value = JSON.stringify(rooms_details);
 
     // Submit the form
