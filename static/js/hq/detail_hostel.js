@@ -113,7 +113,15 @@ document.addEventListener("DOMContentLoaded", () => {
         .catch(error => console.error("❌ Fetch Error:", error));
     }
 
-    confirmButton.addEventListener("click", payWithPaystack);
+    confirmButton.addEventListener("click", () => {
+      const isAuthenticated = document.querySelector(".user_authenticated").value === "true";
+      if (isAuthenticated) {
+      payWithPaystack();
+      } else {
+      window.location.href = "/authenticate/signup/";
+      console.log(`The user isn't authenticated`)
+      }
+    });
     contentSection.appendChild(confirmButton);
     dialogue.appendChild(roomImage);
     dialogue.appendChild(contentSection);

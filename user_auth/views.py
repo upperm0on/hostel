@@ -37,6 +37,7 @@ def user_signup(request):
         'forms' : forms,
         'msg': message,
         'error_msg': error_msg,
+        'status': 'signup',
     }
     return render(request, template, context)
 
@@ -48,6 +49,7 @@ def create_account_status(sender, instance, created, **kwargs):
 def user_login(request):
     template = 'user_login/login.html'
     message = 'Login Here'
+    message2 = 'sign up here'
     error_msg = ''
     forms = View_user_login() 
     if request.method == "POST":
@@ -65,7 +67,9 @@ def user_login(request):
     context = {
         'forms' : forms,
         'msg': message,
+        'msg2': message2,
         'error_msg': error_msg,
+        'status': 'login'
     }
     return render(request, template, context)
 

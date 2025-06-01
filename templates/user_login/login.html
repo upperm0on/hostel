@@ -6,6 +6,11 @@
         <h4 class='text-center text-dark m-4'>{{ msg }}</h4>
         {% csrf_token %}
         {{ forms.as_p }}
+        {% if status == 'login'%}
+            <div class='text-primary text-uppercase text-center'><a href="{% url 'user_signup' %}" class='nav-link p-1'> Sign-up Here</a></div>
+        {% else %}
+            <div class='text-primary text-uppercase text-center'><a href="{% url 'user_login' %}" class='nav-link p-1'>Login Here</a></div>    
+        {% endif %}
         <div class='error_msg text-center text-danger'>{{ error_msg }}</div>
      <center><button type="submit" class='m-4 submit_btn'>Submit</button></center>
     </form>

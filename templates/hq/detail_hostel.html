@@ -1,5 +1,10 @@
 {% extends "base.html" %} {% load static %} {% block active_hostel %} activated
 {% endblock active_hostel %} {% block content %}
+{% if request.user.is_authenticated %} 
+<input type='hidden' class="user_authenticated" value="true"> 
+{% else %}
+<input type='hidden' class="user_authenticated" value="false"> 
+{% endif %} 
 <link rel="stylesheet" href="{% static 'css/hq/detail_hostel.css' %}" />
 <input type='hidden' class='paystack_secret_key' value="{{ paystack_public_key }}" >
 <div class="hostel">

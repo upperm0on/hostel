@@ -105,14 +105,17 @@ def read_hostel(request):
     return render(request, 'hq/read_hostels.html', context)
 
 def update_hostel(request, id):
-    hostel_instance = Hostel.objects.get(id=id) 
-    form = Views_addHostel(request.POST or None, request.FILES,  instance=hostel_instance)
+    hostel_instance = Hostel.objects.get(id=id)
     if request.method == "POST":
-        if form.is_valid(): 
+        form = Views_addHostel(request.POST, request.FILES, instance=hostel_instance)
+        if form.is_valid():
             form.save()
             return redirect('/hq/read_hostel/')
+    else:
+        form = Views_addHostel(instance=hostel_instance)
     context = {
-        'form' : form, 
+        'form': form,
+        'model': hostel_instance,
     }
     return render(request, 'hq/update_hostel.html', context)
 

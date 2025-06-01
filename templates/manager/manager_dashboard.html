@@ -54,7 +54,8 @@
         <p><strong>Location:</strong> {{ hostel.location }}</p>
         <p><strong>Total Rooms:</strong> {{ total_rooms }}</p>
         <p><strong>Rating:</strong> {{ ratings|default:"No Ratings Yet" }}</p>
-        </div>
+      </div>
+      <p><a href='{% url "update_hostel" hostel.id %}' class="btn btn-primary">Update Info</a></p>
         {% else %}
         <div>
         <h5 class="card-title">No Hostel Found</h5>
