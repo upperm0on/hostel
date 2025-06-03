@@ -1,14 +1,14 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.conf import settings
-import os, requests
+import os
+import requests
+import json
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.decorators import login_required
 
 from .models import Hostel
 from .add_hostel_forms import Views_addHostel
@@ -22,9 +22,13 @@ from ratings.models import (
 
 from managers.models import Manager
 
-import json
-
 from reviews.models import Reviews
+
+from django.utils.text import slugify
+from django.core.files.storage import FileSystemStorage
+
+from consumers.models import Consumer
+from payments.models import Payment
 
 
 def add_hostel(request):
@@ -122,30 +126,28 @@ def update_hostel(request, id):
             instance.room_details = hidden_data
             instance.additional_details = request.POST.get('hidden_info_data', '')
             manager = Manager.objects.get(user=request.user)
-
             instance.manager = manager
 
-            room_images = request.FILES.getlist('room_image')
-            print(request.FILES)
-            print("Room images:", room_images)
-
+            room_images_dict = {x: request.FILES[x] for x in request.FILES if x.startswith('room_image')}
             count = 0
-            for room_image in room_images:
+            for key in sorted(room_images_dict.keys()):  # sort to ensure correct order
+                room_image = room_images_dict[key]
                 room_number = str(room_details[count]['number_in_room']) if isinstance(room_details, list) and count < len(room_details) else str(count)
 
-                room_image_path = os.path.join(settings.MEDIA_ROOT, 'room_images', instance.name, room_number)
-                os.makedirs(room_image_path, exist_ok=True)  # Ensure the directory exists
+                room_image_path = os.path.join('room_images', instance.name, str(room_number))
+                full_room_image_path = os.path.join(settings.MEDIA_ROOT, room_image_path)
+                os.makedirs(full_room_image_path, exist_ok=True)
 
                 try:
-                    image_path = os.path.join(room_image_path, room_image.name)
+                    image_path = os.path.join(full_room_image_path, room_image.name)
                     with open(image_path, 'wb+') as destination:
                         for chunk in room_image.chunks():
                             destination.write(chunk)
-                    print(f"Image saved at: {image_path}")
-                    count += 1  # Increment the count only after successful processing
+                    print(f"Image saved/updated at: {image_path}")
                 except Exception as e:
                     print(f"Error saving image {room_image.name}: {e}")
-                
+                count += 1
+
             instance.save()
             return redirect('/hq/read_hostel/')
     else:
@@ -203,8 +205,9 @@ def detail_hostel(request, id):
 
         if os.path.exists(image_directory):
             for filename in os.listdir(image_directory):
-                if filename.endswith(('.png', '.jpg', '.jpeg')):
-                    room_image_urls.append(os.path.join(settings.MEDIA_URL, 'room_images', hostel_name, room_number, filename))
+                if filename.lower().endswith(('.png', '.jpg', '.jpeg')):
+                    image_url = f"{settings.MEDIA_URL}room_images/{hostel_name}/{room_number}/{filename}"
+                    room_image_urls.append(image_url)
                     
     print(room_image_urls)
     context = {
