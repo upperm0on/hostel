@@ -53,6 +53,10 @@
         </center>
       </div>
 
+      <script type='application/json' id='amenities_list'>
+        {{ model.room_details|safe }}
+      </script>
+      
       <!-- Room Details Section -->
       <div class="form-obj slide">
         <h4 class="text-center m-3">Room Details</h4>
@@ -99,18 +103,25 @@
                                                     roomImages = [];
                                                 }
                                             }
-                                            let imageUrl;
+                                            let imageUrl = '';
                                             if (roomImages && roomImages.length > 0) {
                                                 imageUrl = `/media/room_images/{{ model.name }}/${room.number_in_room}/${roomImages[0]}`;
                                                 existingImage.src = imageUrl;
                                                 existingImage.alt = 'Room Image';
                                                 existingImage.style.display = 'block';
                                             } else {
-                                                imageUrl = '{% static "img/default_room.png" %}';
-                                                existingImage.src = imageUrl;
-                                                existingImage.alt = 'Default Room Image';
-                                                existingImage.style.display = 'block';
+                                                existingImage.src = '';
+                                                existingImage.alt = 'No Room Image';
+                                                existingImage.style.display = 'none';
                                             }
+
+                                            // Add a hidden input to preserve the existing image filename if no new file is selected
+                                            const existingImageInput = document.createElement('input');
+                                            existingImageInput.type = 'hidden';
+                                            existingImageInput.name = `existing_room_image_${index + 1}`;
+                                            existingImageInput.value = (roomImages && roomImages.length > 0) ? roomImages[0] : '';
+
+                                            console.log('Image URL:', imageUrl);
 
                                             // When the form is submitted, if the user hasn't selected a new file, keep the existing image src as the value
                                             roomImageInput.dataset.defaultSrc = imageUrl;
@@ -246,15 +257,16 @@
 
                                             const roomAmenitiesHidden = document.createElement('input');
                                             roomAmenitiesHidden.type = 'hidden';
-                                            roomAmenitiesHidden.classList.add('room_amenities_hidden');
-                                            roomAmenitiesHidden.name = `room_amenities_${index + 1}`;
-                                            roomAmenitiesHidden.value = room.amenities || '';
-                                            roomAmenitiesHidden.dataset.roomId = `room_${index + 1}`;
-
                                             roomDetailItem.appendChild(roomNumberInput);
                                             roomDetailItem.appendChild(quantityInput);
                                             roomDetailItem.appendChild(priceInput);
                                             roomDetailItem.appendChild(existingImage);
+                                            roomDetailItem.appendChild(roomImageInput);
+                                            roomDetailItem.appendChild(existingImageInput); // Add the hidden input for existing image
+                                            roomDetailItem.appendChild(roomAmenityButton);
+                                            roomDetailItem.appendChild(roomAmenitiesHidden);
+
+                                            addRoomDetailsCenter.appendChild(roomDetailItem);
                                             roomDetailItem.appendChild(roomImageInput);
                                             roomDetailItem.appendChild(roomAmenityButton);
                                             roomDetailItem.appendChild(roomAmenitiesHidden);

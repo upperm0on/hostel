@@ -153,6 +153,20 @@ room_info.addEventListener("click", () => {
                         amenity_btn.addEventListener('click', add_amen_func);
                 });
                 
+
+    const json_object = JSON.parse(document.querySelector('#amenities_list').textContent);
+
+    document.querySelectorAll('.room_image').forEach((input, index) => {
+        input.addEventListener('change', (event) => {
+                console.log(`room ${json_object[index + 1]} Image file selected:`, event.target.files)
+        });
+    })
+
+
+document.querySelectorAll('.room_image').forEach(input => {
+        console.log(input.dataset['defaultSrc']);
+});
+
 submit_btn.addEventListener("click", (e) => {
     e.preventDefault();
 
@@ -196,7 +210,7 @@ submit_btn.addEventListener("click", (e) => {
                     price: price[index].value.trim() || "",
                     number_of_rooms: number_of_rooms[index].value.trim() || "",
                     room_image: Array.from(room_images[index].files).map(file => file.name), // Store image file names
-                    amenities: document.querySelectorAll('.room_amenities_hidden')[index].value || "[]"
+                    amenities: (document.querySelectorAll('.room_amenities_hidden')[index]?.value || "[]")
             };
 
             // Filter out empty room details

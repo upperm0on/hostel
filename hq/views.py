@@ -149,7 +149,7 @@ def update_hostel(request, id):
                 count += 1
 
             instance.save()
-            return redirect('/hq/read_hostel/')
+            # return redirect('/hq/read_hostel/')
     else:
         form = Views_addHostel(instance=hostel_instance)
     context = {
