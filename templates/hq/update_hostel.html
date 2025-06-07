@@ -53,226 +53,174 @@
         </center>
       </div>
 
-      <script type='application/json' id='amenities_list'>
-        {{ model.room_details|safe }}
-      </script>
-      
       <!-- Room Details Section -->
       <div class="form-obj slide">
         <h4 class="text-center m-3">Room Details</h4>
         <div class="add_room_details_center">
           <script lang="javascript">
-                                        const roomDetailsList = {{ model.room_details|safe }};
-                                        console.log(roomDetailsList)
-                                        const addRoomDetailsCenter = document.querySelector('.add_room_details_center');
+            const roomDetailsList = {{ model.room_details|safe }};
+            const addRoomDetailsCenter = document.querySelector('.add_room_details_center');
 
-                                        roomDetailsList.forEach((room, index) => {
-                                            const roomDetailItem = document.createElement('div');
-                                            roomDetailItem.classList.add('add_info_item');
+            roomDetailsList.forEach((room, index) => {
+          const roomDetailItem = document.createElement('div');
+          roomDetailItem.classList.add('add_info_item');
 
-                                            const roomNumberInput = document.createElement('input');
-                                            roomNumberInput.type = 'number';
-                                            roomNumberInput.classList.add('add_room_number');
-                                            roomNumberInput.name = `room_number_${index + 1}`;
-                                            roomNumberInput.value = room.number_in_room || '';
+          const roomNumberInput = document.createElement('input');
+          roomNumberInput.type = 'number';
+          roomNumberInput.classList.add('add_room_number');
+          roomNumberInput.name = `room_number_${index + 1}`;
+          roomNumberInput.value = room.number_in_room || '';
 
-                                            const quantityInput = document.createElement('input');
-                                            quantityInput.type = 'number';
-                                            quantityInput.classList.add('quantity');
-                                            quantityInput.name = `quantity_${index + 1}`;
-                                            quantityInput.value = room.number_of_rooms || '';
+          const quantityInput = document.createElement('input');
+          quantityInput.type = 'number';
+          quantityInput.classList.add('quantity');
+          quantityInput.name = `quantity_${index + 1}`;
+          quantityInput.value = room.number_of_rooms || '';
 
-                                            const priceInput = document.createElement('input');
-                                            priceInput.type = 'number';
-                                            priceInput.classList.add('price');
-                                            priceInput.name = `price_${index + 1}`;
-                                            priceInput.value = room.price || '';
+          const priceInput = document.createElement('input');
+          priceInput.type = 'number';
+          priceInput.classList.add('price');
+          priceInput.name = `price_${index + 1}`;
+          priceInput.value = room.price || '';
 
-                                            const roomImageInput = document.createElement('input');
-                                            roomImageInput.type = 'file';
-                                            roomImageInput.classList.add('room_image');
-                                            roomImageInput.name = `room_image_${index + 1}`;
+          const roomImageInput = document.createElement('input');
+          roomImageInput.type = 'file';
+          roomImageInput.classList.add('room_image');
+          roomImageInput.name = `room_image_${index + 1}`;
 
-                                            const existingImage = document.createElement('img');
-                                            // Set the existing image as the default preview and as the default value for the new image
-                                            let roomImages = room.room_image;
-                                            if (typeof roomImages === 'string') {
-                                                try {
-                                                    roomImages = JSON.parse(roomImages);
-                                                } catch (e) {
-                                                    roomImages = [];
-                                                }
-                                            }
-                                            let imageUrl = '';
-                                            if (roomImages && roomImages.length > 0) {
-                                                imageUrl = `/media/room_images/{{ model.name }}/${room.number_in_room}/${roomImages[0]}`;
-                                                existingImage.src = imageUrl;
-                                                existingImage.alt = 'Room Image';
-                                                existingImage.style.display = 'block';
-                                            } else {
-                                                existingImage.src = '';
-                                                existingImage.alt = 'No Room Image';
-                                                existingImage.style.display = 'none';
-                                            }
+          const existingImage = document.createElement('img');
+          let roomImages = room.room_image;
+          if (typeof roomImages === 'string') {
+              try {
+            roomImages = JSON.parse(roomImages);
+              } catch (e) {
+            roomImages = [];
+              }
+          }
+          let imageUrl;
+          if (roomImages && roomImages.length > 0) {
+              imageUrl = `/media/room_images/{{ model.name }}/${room.number_in_room}/${roomImages[0]}`;
+              existingImage.src = imageUrl;
+              existingImage.alt = 'Room Image';
+              existingImage.style.display = 'block';
+          } else {
+              imageUrl = '{% static "img/default_room.png" %}';
+              existingImage.src = imageUrl;
+              existingImage.alt = 'Default Room Image';
+              existingImage.style.display = 'block';
+          }
 
-                                            // Add a hidden input to preserve the existing image filename if no new file is selected
-                                            const existingImageInput = document.createElement('input');
-                                            existingImageInput.type = 'hidden';
-                                            existingImageInput.name = `existing_room_image_${index + 1}`;
-                                            existingImageInput.value = (roomImages && roomImages.length > 0) ? roomImages[0] : '';
+          // Only update the image preview when a new file is chosen
+          roomImageInput.addEventListener('change', (event) => {
+              const file = event.target.files[0];
+              if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                existingImage.src = e.target.result;
+                existingImage.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+              }
+          });
 
-                                            console.log('Image URL:', imageUrl);
+          const notification = document.createElement('p');
+          notification.textContent = 'No Image, use default.';
+          notification.style.fontSize = '12px';
+          notification.style.color = '#555';
+          notification.style.marginTop = '5px';
 
-                                            // When the form is submitted, if the user hasn't selected a new file, keep the existing image src as the value
-                                            roomImageInput.dataset.defaultSrc = imageUrl;
-                                            roomImageInput.addEventListener('change', (event) => {
-                                                const file = event.target.files[0];
-                                                if (file) {
-                                                    const reader = new FileReader();
-                                                    reader.onload = (e) => {
-                                                        existingImage.src = e.target.result;
-                                                        existingImage.style.display = 'block';
-                                                    };
-                                                    reader.readAsDataURL(file);
-                                                } else {
-                                                    // If no file selected, revert to default src
-                                                    existingImage.src = roomImageInput.dataset.defaultSrc;
-                                                    existingImage.style.display = 'block';
-                                                }
-                                            });
+          roomDetailItem.appendChild(notification);
+          existingImage.style.maxWidth = '100px';
+          existingImage.style.maxHeight = '100px';
+          existingImage.style.display = room.room_image ? 'block' : 'none';
 
-                                            const notification = document.createElement('p');
-                                            notification.textContent = 'No Image, use default.';
-                                            notification.style.fontSize = '12px';
-                                            notification.style.color = '#555';
-                                            notification.style.marginTop = '5px';
+          const roomAmenityButton = document.createElement('button');
+          roomAmenityButton.type = 'button';
+          roomAmenityButton.classList.add('room_amenity_btn');
+          roomAmenityButton.dataset.roomId = `room_${index + 1}`;
+          roomAmenityButton.innerHTML = '<i class="fas fa-plus-circle"></i> Add Amenities';
 
-                                            roomDetailItem.appendChild(notification);
-                                            existingImage.style.maxWidth = '100px';
-                                            existingImage.style.maxHeight = '100px';
-                                            existingImage.style.display = room.room_image ? 'block' : 'none';
+          roomAmenityButton.addEventListener('click', () => {
+              const roomId = roomAmenityButton.getAttribute('data-room-id');
+              const dialog = document.createElement('div');
+              dialog.classList.add('amenity-dialog');
+              dialog.innerHTML = `
+            <h4 class='text-light text-center m-3'>Room Amenities</h4>
+            <div class='amenity-inputs'></div>
+            <button type='button' class='add_item_btn'>Add Item</button>
+            <button type='button' class='done_btn'>Done</button>
+              `;
+              document.body.appendChild(dialog);
 
-                                            // Update the image preview when a new file is chosen
-                                            roomImageInput.addEventListener('change', (event) => {
-                                                const file = event.target.files[0];
-                                                if (file) {
-                                                    const reader = new FileReader();
-                                                    reader.onload = (e) => {
-                                                        existingImage.src = e.target.result;
-                                                        existingImage.style.display = 'block';
-                                                    };
-                                                    reader.readAsDataURL(file);
-                                                }
-                                            });
+              const add_item_btn = dialog.querySelector('.add_item_btn');
+              const done_btn = dialog.querySelector('.done_btn');
+              const amenityInputsContainer = dialog.querySelector('.amenity-inputs');
 
-                                            const roomAmenityButton = document.createElement('button');
-                                            roomAmenityButton.type = 'button';
-                                            roomAmenityButton.classList.add('room_amenity_btn');
-                                            roomAmenityButton.dataset.roomId = `room_${index + 1}`;
-                                            roomAmenityButton.innerHTML = '<i class="fas fa-plus-circle"></i> Add Amenities';
+              amenities_list = JSON.parse(room.amenities);
 
-                                            roomAmenityButton.addEventListener('click', () => {
-                                                    const roomId = roomAmenityButton.getAttribute('data-room-id'); // Get the room's unique ID
+              function addAmenityInput(value = '') {
+            const inputWrapper = document.createElement('div');
+            inputWrapper.classList.add('amenity-input-wrapper');
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.classList.add('room_amenity_item');
+            input.placeholder = 'Enter Amenity';
+            input.value = value;
+            const deleteBtn = document.createElement('button');
+            deleteBtn.type = 'button';
+            deleteBtn.classList.add('delete_amenity_btn');
+            deleteBtn.innerHTML = 'x';
+            deleteBtn.addEventListener('click', () => {
+                amenityInputsContainer.removeChild(inputWrapper);
+            });
+            inputWrapper.appendChild(input);
+            inputWrapper.appendChild(deleteBtn);
+            amenityInputsContainer.appendChild(inputWrapper);
+              }
 
-                                                            // Create a popup for amenities
-                                                            const dialog = document.createElement('div');
-                                                            dialog.classList.add('amenity-dialog');
-                                                            dialog.innerHTML = `
-                                                                            <h4 class='text-light text-center m-3'>Room Amenities</h4>
-                                                                            <div class='amenity-inputs'></div>
-                                                                            <button type='button' class='add_item_btn'>Add Item</button>
-                                                                            <button type='button' class='done_btn'>Done</button>
-                                                            `;
-                                                            document.body.appendChild(dialog);
+              if (!dialog.dataset.initialized) {
+            const existingAmenities = getCookie(roomId);
+            if (existingAmenities) {
+                JSON.parse(existingAmenities).forEach(addAmenityInput);
+            } else {
+                addAmenityInput();
+            }
+            add_item_btn.addEventListener('click', () => addAmenityInput());
+            dialog.dataset.initialized = true;
+              } else {
+            amenityInputsContainer.innerHTML = '';
+            const existingAmenities = getCookie(roomId);
+            if (existingAmenities) {
+                JSON.parse(existingAmenities).forEach(addAmenityInput);
+            }
+              }
+              done_btn.addEventListener('click', () => {
+            const amenities = Array.from(amenityInputsContainer.querySelectorAll('.room_amenity_item'))
+                .map(input => input.value)
+                .filter(value => value);
+            setCookie(roomId, JSON.stringify(amenities), 1);
+            roomDetailItem.querySelector('.room_amenities_hidden').value = JSON.stringify(amenities);
+            document.body.removeChild(dialog);
+              });
+          });
 
-                                                            const add_item_btn = dialog.querySelector('.add_item_btn');
-                                                            const done_btn = dialog.querySelector('.done_btn');
-                                                            const amenityInputsContainer = dialog.querySelector('.amenity-inputs');
+          const roomAmenitiesHidden = document.createElement('input');
+          roomAmenitiesHidden.type = 'hidden';
+          roomAmenitiesHidden.classList.add('room_amenities_hidden');
+          roomAmenitiesHidden.name = `room_amenities_${index + 1}`;
+          roomAmenitiesHidden.value = room.amenities || '';
+          roomAmenitiesHidden.dataset.roomId = `room_${index + 1}`;
 
-                                                            amenities_list = JSON.parse(room.amenities);
+          roomDetailItem.appendChild(roomNumberInput);
+          roomDetailItem.appendChild(quantityInput);
+          roomDetailItem.appendChild(priceInput);
+          roomDetailItem.appendChild(existingImage);
+          roomDetailItem.appendChild(roomImageInput);
+          roomDetailItem.appendChild(roomAmenityButton);
+          roomDetailItem.appendChild(roomAmenitiesHidden);
 
-
-                                                            // Function to add a new input field with delete button
-                                                            function addAmenityInput(value = '') {
-                                                                            const inputWrapper = document.createElement('div');
-                                                                            inputWrapper.classList.add('amenity-input-wrapper');
-                                                                            const input = document.createElement('input');
-                                                                            input.type = 'text';
-                                                                            input.classList.add('room_amenity_item');
-                                                                            input.placeholder = 'Enter Amenity';
-                                                                            input.value = value;
-                                                                            const deleteBtn = document.createElement('button');
-                                                                            deleteBtn.type = 'button';
-                                                                            deleteBtn.classList.add('delete_amenity_btn');
-                                                                            deleteBtn.innerHTML = 'x';
-                                                                            deleteBtn.addEventListener('click', () => {
-                                                                                            amenityInputsContainer.removeChild(inputWrapper);
-                                                                            });
-                                                                            inputWrapper.appendChild(input);
-                                                                            inputWrapper.appendChild(deleteBtn);
-                                                                            amenityInputsContainer.appendChild(inputWrapper);
-                                                            }
-
-                                                            // Check if the dialog is already initialized
-                                                            if (!dialog.dataset.initialized) {
-                                                                            // Check if there are existing amenities in the cookie and pre-fill
-                                                                            const existingAmenities = getCookie(roomId); // Use unique room ID for cookie
-                                                                            if (existingAmenities) {
-                                                                                            JSON.parse(existingAmenities).forEach(addAmenityInput);
-                                                                            } else {
-                                                                                            // If no cookie exists, add an empty input field by default
-                                                                                            addAmenityInput();
-                                                                            }
-
-                                                                            // Event listener to add more input fields
-                                                                            add_item_btn.addEventListener('click', () => addAmenityInput());
-
-                                                                            // Mark the dialog as initialized
-                                                                            dialog.dataset.initialized = true;
-                                                            } else {
-                                                                            // If already initialized, clear the container and load only from the cookie
-                                                                            amenityInputsContainer.innerHTML = '';
-                                                                            const existingAmenities = getCookie(roomId);
-                                                                            if (existingAmenities) {
-                                                                                            JSON.parse(existingAmenities).forEach(addAmenityInput);
-                                                                            }
-                                                            }
-                                                            // Event listener for the done button
-                                                            done_btn.addEventListener('click', () => {
-                                                                            // Collect all amenities from inputs
-                                                                            const amenities = Array.from(amenityInputsContainer.querySelectorAll('.room_amenity_item'))
-                                                                                            .map(input => input.value)
-                                                                                            .filter(value => value); // Filter out empty values
-
-                                                                            // Save the amenities in a cookie with unique room ID
-                                                                            setCookie(roomId, JSON.stringify(amenities), 1); // Set for 1 day
-
-                                                                            // Update the hidden input for amenities
-                                                                            roomDetailItem.querySelector('.room_amenities_hidden').value = JSON.stringify(amenities);
-
-                                                                            // Close the dialog
-                                                                            document.body.removeChild(dialog);
-                                                                    });
-                                            });
-
-                                            const roomAmenitiesHidden = document.createElement('input');
-                                            roomAmenitiesHidden.type = 'hidden';
-                                            roomDetailItem.appendChild(roomNumberInput);
-                                            roomDetailItem.appendChild(quantityInput);
-                                            roomDetailItem.appendChild(priceInput);
-                                            roomDetailItem.appendChild(existingImage);
-                                            roomDetailItem.appendChild(roomImageInput);
-                                            roomDetailItem.appendChild(existingImageInput); // Add the hidden input for existing image
-                                            roomDetailItem.appendChild(roomAmenityButton);
-                                            roomDetailItem.appendChild(roomAmenitiesHidden);
-
-                                            addRoomDetailsCenter.appendChild(roomDetailItem);
-                                            roomDetailItem.appendChild(roomImageInput);
-                                            roomDetailItem.appendChild(roomAmenityButton);
-                                            roomDetailItem.appendChild(roomAmenitiesHidden);
-
-                                            addRoomDetailsCenter.appendChild(roomDetailItem);
-                                        });
+          addRoomDetailsCenter.appendChild(roomDetailItem);
+            });
           </script>
         </div>
         <center>

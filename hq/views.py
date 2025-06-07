@@ -9,6 +9,8 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
+
 
 from .models import Hostel
 from .add_hostel_forms import Views_addHostel
@@ -30,7 +32,7 @@ from django.core.files.storage import FileSystemStorage
 from consumers.models import Consumer
 from payments.models import Payment
 
-
+@login_required(login_url='user_signup')
 def add_hostel(request):
     form = Views_addHostel()
     if request.method == "POST":
@@ -108,19 +110,19 @@ def read_hostel(request):
     }
     return render(request, 'hq/read_hostels.html', context)
 
+@login_required(login_url='user_signup')
 def update_hostel(request, id):
     hostel_instance = Hostel.objects.get(id=id)
     if request.method == "POST":
         form = Views_addHostel(request.POST, request.FILES, instance=hostel_instance)
         if form.is_valid():
             instance = form.save(commit=False)
+            hostel_instance = Hostel.objects.get(id=instance.pk)
             hidden_data = request.POST.get('hidden_data', '[]')  # Default to empty list JSON
 
             try:
                 room_details = json.loads(hidden_data)
-                print("Parsed room details:", room_details)
             except json.JSONDecodeError as e:
-                print(f"Error parsing JSON: {e}")
                 room_details = []
 
             instance.room_details = hidden_data
@@ -128,28 +130,48 @@ def update_hostel(request, id):
             manager = Manager.objects.get(user=request.user)
             instance.manager = manager
 
-            room_images_dict = {x: request.FILES[x] for x in request.FILES if x.startswith('room_image')}
-            count = 0
-            for key in sorted(room_images_dict.keys()):  # sort to ensure correct order
-                room_image = room_images_dict[key]
-                room_number = str(room_details[count]['number_in_room']) if isinstance(room_details, list) and count < len(room_details) else str(count)
+            # Prepare to handle images: use new if uploaded, else keep existing
+            for idx, room in enumerate(room_details):
+                room_number = str(room.get('number_in_room', idx))
+                image_field_name = f'room_image_{idx + 1}'
+                uploaded_image = request.FILES.get(image_field_name, None)
 
-                room_image_path = os.path.join('room_images', instance.name, str(room_number))
+                room_image_path = os.path.join('room_images', instance.name, room_number)
                 full_room_image_path = os.path.join(settings.MEDIA_ROOT, room_image_path)
                 os.makedirs(full_room_image_path, exist_ok=True)
 
-                try:
-                    image_path = os.path.join(full_room_image_path, room_image.name)
-                    with open(image_path, 'wb+') as destination:
-                        for chunk in room_image.chunks():
-                            destination.write(chunk)
-                    print(f"Image saved/updated at: {image_path}")
-                except Exception as e:
-                    print(f"Error saving image {room_image.name}: {e}")
-                count += 1
+                if uploaded_image:
+                    try:
+                        image_path = os.path.join(full_room_image_path, uploaded_image.name)
+                        with open(image_path, 'wb+') as destination:
+                            for chunk in uploaded_image.chunks():
+                                destination.write(chunk)
+                        print(f"Image saved at: {image_path}")
+                    except Exception as e:
+                        print(f"Error saving image {uploaded_image}: {e}")
+                else:
+                    # No new image uploaded for this room, keep existing images (do nothing)
+                    instance_room_details = json.loads(instance.room_details)
+                    hostel_room_details = json.loads(hostel_instance.room_details)
+
+                    print(hostel_room_details[idx]['room_image'], instance_room_details[idx]['room_image'])
+
+                    # idx + 1 is for human-readable room number
+                    room_index = idx + 1  # Use this in print statements, file names, etc.
+                    list_index = idx      # Use this to access elements in the list
+
+                    # Assign existing image if no new one is uploaded
+                    instance_room_details[list_index]['room_image'] = hostel_room_details[list_index]['room_image']
+                    instance.room_details = json.dumps(instance_room_details)
+
+                    print(
+                        f"\nNo image is detected for room {room_index}, keeping existing image: "
+                        f"{hostel_room_details[list_index]['room_image']}\n"
+                    )
+
 
             instance.save()
-            # return redirect('/hq/read_hostel/')
+            return redirect('read_hostels')
     else:
         form = Views_addHostel(instance=hostel_instance)
     context = {
